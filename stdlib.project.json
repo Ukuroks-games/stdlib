@@ -1,0 +1,13 @@
+{
+	"name": "stdlib",
+	"tree": {
+		"$className": "DataModel",
+		"ReplicatedStorage": {
+			"$className": "ReplicatedStorage",
+			"$ignoreUnknownInstances": true,
+			"Packages": {
+				"$path": "src"
+			}
+		}
+	}
+}

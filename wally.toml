@@ -1,6 +1,6 @@
 [package]
-name = "/"
+name = "egor00f/stdlib"
 version = "0.1.0"
 registry = "https://github.com/UpliftGames/wally-index"
 realm = "shared"
-license = ""
+license = "MIT"
