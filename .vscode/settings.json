@@ -1,6 +1,8 @@
 {
-    "editor.insertSpaces": true,
+    "editor.insertSpaces": false,
     "editor.tabSize": 4,
+
+    "cSpell.enabled": true,
 
     "luau-lsp.sourcemap.rojoProjectFile": "stdlib.project.json"
 }

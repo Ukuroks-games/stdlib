@@ -8,6 +8,10 @@
 			"Packages": {
 				"$path": "src"
 			}
+		},
+		"Workspace": {
+			"$className": "Workspace",
+			"$path": "tests"
 		}
 	}
 }
