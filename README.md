@@ -1,11 +1,10 @@
 # stdlib
 
-some things that realize algorithms
+library that implements some algorithms
 
 ## Classes
 
 + vector
 + stack
-
-## Functions
++ queue
 

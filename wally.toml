@@ -1,6 +1,11 @@
 [package]
 name = "egor00f/stdlib"
-version = "0.1.0"
+description = "Library that implements some algorithms"
+version = "0.1.1"
 registry = "https://github.com/UpliftGames/wally-index"
 realm = "shared"
 license = "MIT"
+repository = "https://github/Ukuroks-games/stdlib"
+authors = ["Egor00f <velikiydolbayeb@gmail.com>"]
+exclude = ["stdlib.rbxl"]
+private = false
