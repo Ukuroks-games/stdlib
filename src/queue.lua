@@ -36,7 +36,7 @@ function queue.size(self: queue): number
 end
 
 --[[
-	Пустая ли очередь
+	Проверить пустая ли очередь
 ]]
 function queue.empty(self: queue): boolean
 	return self:size() == 0
@@ -47,6 +47,15 @@ end
 ]]
 function queue.push(self: queue, value: any)
 	table.insert(self._data, value)
+end
+
+--[[
+	Добавть сразу несколько значений в очередь
+]]
+function queue.push_range(self: queue, values: {[number]: any})
+	for _, v in pairs(values) do
+		table.insert(self._data, v)
+	end
 end
 
 --[[
