@@ -4,5 +4,17 @@
 
     "cSpell.enabled": true,
 
+    "cSpell.words": [
+
+    ],
+
+    "cSpell.ignorePaths": [
+        "vscode-extension",
+        ".git/objects",
+        ".vscode",
+        ".vscode-insiders",
+        "*.toml"
+    ],
+
     "luau-lsp.sourcemap.rojoProjectFile": "stdlib.project.json"
 }

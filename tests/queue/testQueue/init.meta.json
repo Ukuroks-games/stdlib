@@ -1,0 +1,14 @@
+{
+	"$properties": {
+		"Attributes": {
+			"NumOfTests": {
+				"number": 1
+			}
+		},
+		"AttributesSerialized": {
+			"NumOfTests": {
+				"number": 1
+			}
+		}
+	}
+}

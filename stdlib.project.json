@@ -1,17 +1,20 @@
 {
-	"name": "stdlib",
-	"tree": {
-		"$className": "DataModel",
-		"ReplicatedStorage": {
-			"$className": "ReplicatedStorage",
-			"$ignoreUnknownInstances": true,
-			"Packages": {
-				"$path": "src"
-			}
-		},
-		"Workspace": {
-			"$className": "Workspace",
-			"$path": "tests"
-		}
-	}
+  "name": "stdlib tests",
+  "tree": {
+    "$className": "DataModel",
+    "ReplicatedStorage": {
+      "$className": "ReplicatedStorage",
+      "DevPackages": {
+        "$path": "DevPackages"
+      },
+      "Packages": {
+        "$path": "src"
+      },
+      "$ignoreUnknownInstances": true
+    },
+    "Workspace": {
+      "$className": "Workspace",
+      "$path": "tests"
+    }
+  }
 }
