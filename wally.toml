@@ -7,7 +7,7 @@ realm = "shared"
 license = "MIT"
 repository = "https://github/Ukuroks-games/stdlib"
 authors = ["Egor00f <velikiydolbayeb@gmail.com>"]
-exclude = ["stdlib.rbxl", "stdlib.project.json"]
+exclude = ["stdlib.rbxl", "stdlib.project.json", "tests"]
 private = false
 
 
