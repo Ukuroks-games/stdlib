@@ -5,8 +5,8 @@ stack.__index = stack
 --[[
 	# Создать стэк
 ]]
-function stack.new()
-	return setmetatable({data = {}}, stack)
+function stack.new(init: {}?)
+	return setmetatable({data = init or {}}, stack)
 end
 
 --[[

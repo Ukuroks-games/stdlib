@@ -407,6 +407,10 @@ function algorithm.fill<T>(Table: {T}, value: T, start: number?, endFill: number
 	end
 end
 
+--[[
+	Удалить элементы в диапазоне
+	
+]]
 function algorithm.remove(Table: {[number]: any}, start: number?, endRemove: number?)
 
 	for i = start or 1, endRemove or #Table, 1 do
