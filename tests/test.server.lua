@@ -33,9 +33,7 @@ TestsFolder.ChildAdded:Connect(function(a0: string)
 			testsList,
 			function(value): boolean 
 					return value.Name == v.Name
-				end
-			) then
-
+				end) then
 				table.insert(testsList, testlib.test.fromFolder(v))
 		end
 	end

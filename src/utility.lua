@@ -1,5 +1,10 @@
 local utility = {}
 
+export type Pair<First, Second> = {
+	first: First,
+	second: Second
+}
+
 --[[
 	# Поменять две переменные местами
 

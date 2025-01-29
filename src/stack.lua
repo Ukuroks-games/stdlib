@@ -56,8 +56,4 @@ function stack:pop(): any
 
 end
 
-function stack:swap()
-	
-end
-
 return stack

@@ -15,6 +15,11 @@
     "Workspace": {
       "$className": "Workspace",
       "$path": "tests"
+    },
+    "ServerScriptService": {
+      "$properties": {
+        "LoadStringEnabled": true
+      }
     }
   }
 }
