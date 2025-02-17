@@ -1,11 +1,12 @@
-
+--[[
+	Vector class
+]]
 local vector = {}
-
-vector.Class = {}
+vector.__index = vector
 
 export type vector<T> = typeof(setmetatable(
 	{} :: {
-		_data: {
+		data: {
 			[number]: T
 		}	
 	}, vector
@@ -16,10 +17,10 @@ export type vector<T> = typeof(setmetatable(
 ]]
 function vector.new<T>(init: {}?): vector<T>
 	local self = setmetatable({
-		_data = init or {},
-	}, vector.Class)
+		data = init or {},
+	}, vector)
 	
-	setmetatable(self, {__index = self._data})
+	setmetatable(self, {__index = self.data})
 
 	return self
 end
@@ -27,34 +28,34 @@ end
 --[[
 	# Провить, пустой ли вектор
 ]]
-function vector.Class.empty<T>(self: vector<T>): boolean
-	return #self._data == 0
+function vector:empty<T>(): boolean
+	return #self.data == 0
 end
 
 --[[
 	Получить размер массива
 ]]
-function vector.Class.size<T>(self: vector<T>): number
-	return #self._data
+function vector:size<T>(): number
+	return #self.data
 end
 
 --[[
 	Удалить последний элемент
 ]]
-function vector.Class.pop_back<T>(self: vector<T>): T?
-	return table.remove(self._data, #self._data)
+function vector:pop_back<T>(): T?
+	return table.remove(self.data, #self.data)
 end
 
 --[[
 	добавить элемент в конец
 ]]
-function vector.Class.push_back<T>(self: vector<T>, value: T)
-	table.insert(self._data, value)
+function vector:push_back<T>(value: T)
+	table.insert(self.data, value)
 end
 
-function vector.Class.at<T>(self: vector<T>, index: number): T?
-	if #self._data >= index then
-		return self._data[index]
+function vector:at<T>(index: number): T?
+	if #self.data >= index then
+		return self.data[index]
 	else
 		return nil
    end
@@ -63,28 +64,22 @@ end
 --[[
 	Очистить вектор
 ]]
-function vector.Class.clear<T>(self: vector<T>)
-	table.clear(self._data)
+function vector:clear<T>()
+	table.clear(self.data)
 end
 
 --[[
 	Удалить элемент или элементы
 ]]
-function vector.Class.erase<T>(self: vector<T>, startIndex: number, endIndex: number?)
+function vector:erase<T>(startIndex: number, endIndex: number?)
 	if endIndex then
 		for i = 1, endIndex - startIndex do
-			table.remove(self._data, startIndex + i)
+			table.remove(self.data, startIndex + i)
 		end
 	else
-		table.remove(self._data, startIndex)
+		table.remove(self.data, startIndex)
 	end
 end
 
---[[
-	найти в векторе
-]]
-function vector.Class.find<T>(self: vector<T>, value: T): number?
-	return table.find(self._data, value)
-end
 
 return vector

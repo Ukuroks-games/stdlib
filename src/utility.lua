@@ -1,9 +1,27 @@
+
+--[[
+	Utility library
+]]
 local utility = {}
+utility.Pair = {}
+
 
 export type Pair<First, Second> = {
 	first: First,
 	second: Second
 }
+
+--[[
+	Pair constuctor
+]]
+function utility.Pair.new<First, Second>(first: First, second: Second): Pair<First, Second>
+	local self: Pair<First, Second> = {
+		first = first,
+		second = second
+	}
+
+	return self
+end
 
 --[[
 	# Поменять две переменные местами

@@ -1,9 +1,25 @@
 --!nocheck
 
+local utility = require(script.Parent.utility)
+
 --[[
 	# Алгоритмы
+
+	Библиотека с алгоритмами для работы с таблицами
 ]]
 local algorithm = {}
+
+function algorithm.callForAll<T, Index>(Table: {[Index]: T}, startIndex: number?, endIndex: number?, callback: (i: Index)->nil)
+	if startIndex or endIndex then
+		for i = startIndex or 1, endIndex or #Table, 1 do
+			callback(i)
+		end
+	else
+		for i, _ in pairs(Table) do
+			callback(i)
+		end
+	end
+end
 
 --[[
 	# Проверить, что callback возвращает значение true для всех элементов в диапазоне [first, last].
@@ -44,9 +60,7 @@ end
 ]]
 function algorithm.any_of<T>(Table: {T}, callback: (value: T)->boolean, first: number?, last: number?): boolean
 	for i = first or 1, last or #Table, 1 do
-		local a = callback(Table[i])
-
-		if a then
+		if callback(Table[i]) then
 			return true
 		end
 	end
@@ -156,7 +170,7 @@ function search_check<T>(t: {[number]: T}, start: number, range: {T}): boolean
 end
 
 --[[
-	# Нахдит последовательность элеметов в таблице
+	# Находит последовательность элеметов в таблице
 ]]
 function algorithm.search<T>(Table: {[number]: T}, range: {T}, start: number?, endFind: number?): number?
 	
@@ -170,7 +184,7 @@ function algorithm.search<T>(Table: {[number]: T}, range: {T}, start: number?, e
 end
 
 --[[
-	# Нахдит последовательность еэлеметов в таблице
+	# Находит последовательность еэлеметов в таблице
 ]]
 function algorithm.search_n<T>(Table: {[number]: T}, range: {T}, start: number?, endFind: number?): number
 	local counter = 0
@@ -246,9 +260,19 @@ end
 function algorithm.count<T, Index>(Table: {[Index]: T}, value: T, startIndex: Index?, endIndex: Index?): number
 	local counter = 0
 
-	for i = startIndex or 1, endIndex or #Table, 1 do
+	local function f(i: Index)
 		if Table[i] == value then
 			counter += 1
+		end
+	end
+
+	if startIndex or endIndex then
+		for i = startIndex or 1, endIndex or #Table, 1 do
+			f(i)
+		end
+	else
+		for i, _ in pairs(Table) do
+			f(i)
 		end
 	end
 
@@ -265,11 +289,16 @@ end
 function algorithm.count_if<T, Index>(Table: {[Index]: T}, callback: (T)->boolean, startIndex: Index?, endIndex: Index?): number
 	local counter = 0
 
-	for i = startIndex or 1, endIndex or #Table, 1 do
-		if callback(Table[i]) then
-			counter += 1
+	algorithm.callForAll(
+		Table, 
+		startIndex, 
+		endIndex,
+		function(i: Index)
+			if callback(Table[i]) then
+				counter += 1
+			end
 		end
-	end
+	)
 
 	return counter
 end
@@ -291,9 +320,14 @@ end
 ]]
 function algorithm.reverse<Index, T>(Table: {[Index]: T}, startIndex: number?, endIndex: number?): {[Index]: T}
 
-	for i = startIndex or 1, (endIndex or #Table)//2, 1 do
-        Table[i], Table[#Table-i+1] = Table[#Table-i+1], Table[i]
-    end
+	algorithm.callForAll(
+		Table, 
+		startIndex, 
+		endIndex,
+		function (i: Index)
+			Table[i], Table[#Table-i+1] = Table[#Table-i+1], Table[i]
+		end
+	)
 
 	return Table
 end
@@ -306,12 +340,17 @@ function algorithm.unique<Index, T>(Table: {[Index]: T}, startIndex: number?, en
 	local hash = {}
 	local res = {}
 
-	for i = startIndex or 1, endIndex or #Table, 1 do
-		if (not hash[Table[i]]) then
-			res[#res+1] = Table[i] -- you could print here instead of saving to result table if you wanted
-			hash[Table[i]] = true
+	algorithm.callForAll(
+		Table, 
+		startIndex, 
+		endIndex,
+		function(i: Index)
+			if (not hash[Table[i]]) then
+				res[#res+1] = Table[i] -- you could print here instead of saving to result table if you wanted
+				hash[Table[i]] = true
+			end
 		end
-	end
+	)
 
 	return res
 end
@@ -331,18 +370,58 @@ end
 
 	Сгенерированная таблица
 ]]
-function algorithm.generate<T>(generator: ()->T, first: number, last: number): {T}
+function algorithm.generate<T>(generator: (i: number)->T, first: number, last: number): {T}
 	local t = {}
 	
 	for i = first, last, 1 do
-		t[i] = generator()
+		t[i] = generator(i)
 	end
 
 	return t
 end
 
-function algorithm.max_element<T>(Table: {T}, first: number?, last: number?): number
+--[[
+	Получить индекс и значение наибольшего элемента в таблице
+]]
+function algorithm.max_element<Index, T>(Table: {[Index]: T}, startIndex: number?, endIndex: number?): utility.Pair<Index, T>
+	local greatestNumber = -math.huge
+	local k
 
+	algorithm.callForAll(
+		algorithm.copy(Table, startIndex, endIndex), 
+		startIndex, 
+		endIndex,
+		function (i: Index)
+			if Table[i] > greatestNumber then
+				greatestNumber = Table[i]
+				k = i
+			end
+		end
+	)
+
+	return utility.Pair.new(greatestNumber, k)
+end
+
+--[[
+	Получить индекс и значение наменьшего элемента в таблице
+]]
+function algorithm.min_element<Index, T>(Table: {[Index]: T}, startIndex: number?, endIndex: number?): utility.Pair<Index, T>
+	local greatestNumber = math.huge
+	local k
+
+	algorithm.callForAll(
+		algorithm.copy(Table, startIndex, endIndex), 
+		startIndex, 
+		endIndex,
+		function (i: Index)
+			if Table[i] < greatestNumber then
+				greatestNumber = Table[i]
+				k = i
+			end
+		end
+	)
+
+	return utility.Pair.new(greatestNumber, k)
 end
 
 --[[
@@ -351,9 +430,14 @@ end
 function algorithm.copy_by_prop<Index>(Table: {[Index]: {any}}, prop: string, startIndex: number?, endIndex: number?)
 	local t = {}
 
-	for i = startIndex or 1, endIndex or #Table, 1 do
-		t[i] = Table[i][prop]
-	end
+	algorithm.callForAll(
+		Table, 
+		startIndex, 
+		endIndex,
+		function(i: Index)
+			t[i] = Table[i][prop]
+		end
+	)
 
 	return t
 end
@@ -364,12 +448,16 @@ end
 function algorithm.copy_by_props<Index>(Table: {[Index]: {any}}, props: {string}, startIndex: number?, endIndex: number?): {[Index]: {}}
 	local t = {}
 
-	for i = startIndex or 1, endIndex or #Table, 1 do
-		for _, prop in pairs(props) do
-			t[i][prop] = Table[i][prop]
+	algorithm.callForAll(
+		Table, 
+		startIndex, 
+		endIndex,
+		function(i: Index)
+			for _, prop in pairs(props) do
+				t[i][prop] = Table[i][prop]
+			end
 		end
-	end
-
+	)
 	return t
 end
 
@@ -388,45 +476,74 @@ function algorithm.copy<T>(Table: {[number]: T}, startIndex: number?, endIndex: 
 	end
 end
 
-function algorithm.copy_if<T>(Table: {[number]: T}, callback: (value: T)->boolean, startIndex: number?, endIndex: number?): {[number]: T}
+--[[
+	Копировать элементы таблицы если элемент соответсвует условию
+]]
+function algorithm.copy_if<T, Index>(Table: {[Index]: T}, callback: (value: T)->boolean, startIndex: number?, endIndex: number?): {[Index]: T}
 	local t = {}
 
-	for i = startIndex or 1, endIndex or #Table, 1 do
-		if callback(Table[i]) then
-			t[i] = Table[i]
+	algorithm.callForAll(
+		Table, 
+		startIndex,
+		endIndex, 
+		function(i: Index): nil 
+			if callback(Table[i]) then
+				t[i] = Table[i]
+			end
 		end
-	end
+	)
 
 	return t
 end
 
-function algorithm.fill<T>(Table: {T}, value: T, start: number?, endFill: number?)
-	
-	for i = start or 1, endFill or #Table, 1 do
-		Table[i] = value
-	end
+function algorithm.fill<T>(Table: {T}, value: T, startIndex: number?, endIndex: number?)
+
+	algorithm.callForAll(
+		Table, 
+		startIndex,
+		endIndex, 
+		function(i)
+			Table[i] = value
+		end
+	)
 end
 
 --[[
 	Удалить элементы в диапазоне
 	
 ]]
-function algorithm.remove(Table: {[number]: any}, start: number?, endRemove: number?)
+function algorithm.remove(Table: {[any]: any}, startIndex: number?, endIndex: number?)
+	
+	algorithm.callForAll(
+		Table, 
+		startIndex,
+		endIndex, 
+		function(i)
+			table.remove(Table, i)
+		end
+	)	
+end
 
-	for i = start or 1, endRemove or #Table, 1 do
-		table.remove(Table, i)
-	end
+function algorithm.remove_if<T, Index>(Table: {[Index]: T}, callback: (value: T)->boolean, startIndex: number?, endIndex: number?)
+	
+	algorithm.callForAll(
+		Table, 
+		startIndex,
+		endIndex, 
+		function(i)
+			if callback(Table[i]) then
+				table.remove(Table, i)
+			end
+		end
+	)
 	
 end
 
-function algorithm.remove_if<T>(Table: {[number]: T}, callback: (value: T)->boolean, start: number?, endRemove: number?)
-	
-	for i = start or 1, endRemove or #Table, 1 do
-		if callback(Table[i]) then
-			table.remove(Table, i)
-		end
-	end
-	
+--[[
+	Среднее значение в таблице
+]]
+function algorithm.average(t: {number}): number
+	return algorithm.accumulate(t) / #t
 end
 
 return algorithm

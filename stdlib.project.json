@@ -14,7 +14,10 @@
     },
     "Workspace": {
       "$className": "Workspace",
-      "$path": "tests"
+      "$path": "tests",
+      "$properties": {
+        "Gravity": 0
+      }
     },
     "ServerScriptService": {
       "$properties": {
