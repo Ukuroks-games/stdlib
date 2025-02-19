@@ -538,7 +538,7 @@ function algorithm.max_element<Index, T>(Table: { [Index]: T }, startIndex: numb
 	local k
 
 	algorithm.callForAll(
-		algorithm.copy(Table, startIndex, endIndex),
+		Table,
 		startIndex,
 		endIndex,
 		function (i: Index)
@@ -563,7 +563,7 @@ function algorithm.min_element<Index, T>(Table: { [Index]: T }, startIndex: numb
 	local k
 
 	algorithm.callForAll(
-		algorithm.copy(Table, startIndex, endIndex),
+		Table,
 		startIndex,
 		endIndex,
 		function (i: Index)
@@ -579,6 +579,47 @@ function algorithm.min_element<Index, T>(Table: { [Index]: T }, startIndex: numb
 		Index = k
 	}
 end
+
+--[[
+	Получить наменьший индекс в таблице
+]]
+function algorithm.min_key<Index, T>(Table: { [Index]: T }, startIndex: number?, endIndex: number?): number
+	local minNumber = math.huge
+
+	algorithm.callForAll(
+		Table,
+		startIndex,
+		endIndex,
+		function (i: Index)
+			if i < minNumber then
+				minNumber = i
+			end
+		end
+	)
+
+	return minNumber
+end
+
+--[[
+	Получить найбольший индекс в таблице
+]]
+function algorithm.max_key<Index, T>(Table: { [Index]: T }, startIndex: number?, endIndex: number?): number
+	local minNumber = -math.huge
+
+	algorithm.callForAll(
+		Table,
+		startIndex,
+		endIndex,
+		function (i: Index)
+			if i > minNumber then
+				minNumber = i
+			end
+		end
+	)
+
+	return minNumber
+end
+
 
 --[[
 	# Копирует таблицу по одному свойству
@@ -655,7 +696,10 @@ function algorithm.copy_if<T, Index>(Table: { [Index]: T }, callback: (value: T)
 	return t
 end
 
-function algorithm.fill<T>(Table: {T}, value: T, startIndex: number?, endIndex: number?)
+--[[
+
+]]
+function algorithm.fill<T>(Table: { T }, value: T, startIndex: number?, endIndex: number?)
 
 	algorithm.callForAll(
 		Table,
@@ -671,7 +715,7 @@ end
 	Удалить элементы в диапазоне
 	
 ]]
-function algorithm.remove(Table: {[any]: any}, startIndex: number?, endIndex: number?)
+function algorithm.remove(Table: { [any]: any }, startIndex: number?, endIndex: number?)
 	
 	algorithm.callForAll(
 		Table,
@@ -686,7 +730,7 @@ end
 --[[
 	Удалить элементы соответсвующие условию
 ]]
-function algorithm.remove_if<T>(Table: {T}, callback: (value: T)->boolean, startIndex: number?, endIndex: number?)
+function algorithm.remove_if<T>(Table: { T }, callback: (value: T) -> boolean, startIndex: number?, endIndex: number?)
 
 	algorithm.callForAll(
 		Table,
@@ -704,7 +748,7 @@ end
 --[[
 	Среднее значение в таблице
 ]]
-function algorithm.average(t: {number}): number
+function algorithm.average(t: { number }): number
 	return algorithm.accumulate(t) / #t
 end
 
