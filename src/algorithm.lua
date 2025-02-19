@@ -1,7 +1,5 @@
 --!nocheck
 
-local utility = require(script.Parent.utility)
-
 --[[
 	# Алгоритмы
 
@@ -9,7 +7,7 @@ local utility = require(script.Parent.utility)
 ]]
 local algorithm = {}
 
-function algorithm.callForAll<T, Index>(Table: {[Index]: T}, startIndex: number?, endIndex: number?, callback: (i: Index)->nil)
+function algorithm.callForAll<T, Index>(Table: { [Index]: T }, startIndex: number?, endIndex: number?, callback: (i: Index) -> nil)
 	if startIndex or endIndex then
 		for i = startIndex or 1, endIndex or #Table, 1 do
 			callback(i)
@@ -34,11 +32,19 @@ end
 
 	`last` - До какого индекса (только если индекс у таблицы - number
 ]]
-function algorithm.all_of<T>(Table: {T}, callback: (value: T)->boolean, first: number?, last: number?): boolean
+function algorithm.all_of<T>(Table: { [any]: T }, callback: (value: T) -> boolean, startIndex: number?, endIndex: number?): boolean
 
-	for i = first or 1, last or #Table, 1 do
-		if not callback(Table[i]) then
-			return false
+	if startIndex or endIndex then
+		for i = startIndex or 1, endIndex or #Table, 1 do
+			if not callback(Table[i]) then	-- приходится копипастить
+				return false
+			end
+		end
+	else
+		for _, v in pairs(Table) do
+			if not callback(v) then
+				return false
+			end
 		end
 	end
 
@@ -55,13 +61,22 @@ end
 	`callback` - функция
 
 	`first` - С какого индекса начинать (только если индекс у таблицы - number)
-	
+
 	`last` - До какого индекса (только если индекс у таблицы - number
 ]]
-function algorithm.any_of<T>(Table: {T}, callback: (value: T)->boolean, first: number?, last: number?): boolean
-	for i = first or 1, last or #Table, 1 do
-		if callback(Table[i]) then
-			return true
+function algorithm.any_of<T>(Table: { [any]: T }, callback: (value: T) -> boolean, startIndex: number?, endIndex: number?): boolean
+
+	if startIndex or endIndex then
+		for i = startIndex or 1, endIndex or #Table, 1 do
+			if callback(Table[i]) then
+				return true
+			end
+		end
+	else
+		for _, v in pairs(Table) do
+			if callback(v) then
+				return true
+			end
 		end
 	end
 
@@ -78,14 +93,22 @@ end
 	`callback` - функция
 
 	`first` - С какого индекса начинать (только если индекс у таблицы - number)
-	
-	`last` - До какого индекса (только если индекс у таблицы - number
-]]
-function algorithm.none_of<T>(Table: {T}, callback: (value: T)->boolean, first: number?, last: number?): boolean
 
-	for i = first or 1, last or #Table, 1 do
-		if callback(Table[i]) then
-			return false
+	`last` - До какого индекса (только если индекс у таблицы - number)
+]]
+function algorithm.none_of<T>(Table: { T }, callback: (value: T) -> boolean, startIndex: number?, endIndex: number?): boolean
+
+	if startIndex or endIndex then
+		for i = startIndex or 1, endIndex or #Table, 1 do
+			if callback(Table[i]) then
+				return false
+			end
+		end
+	else
+		for _, v in pairs(Table) do
+			if callback(v) then
+				return false
+			end
 		end
 	end
 
@@ -95,18 +118,38 @@ end
 --[[
 	# суммирует или сворачивает ряд элементов 
 ]]
-function algorithm.accumulate(Table: {number}, first: number?, last: number?, init: number?): number
+function algorithm.accumulate(Table: { number }, startIndex: number?, endIndex: number?, init: number?): number
 	local sum = init or 0
 
-	for i = first or 1, last or #Table, 1 do
-		sum += Table[i]
-	end
+	algorithm.callForAll(
+		Table, 
+		startIndex, 
+		endIndex, 
+		function(i: number) 
+			sum += Table[i]
+		end
+	)
 
 	return sum
 end
 
-function algorithm.find<Index, T>(Table: {[Index]: T}, value: T, startFind: Index?): Index?
-	return table.find(Table, value, startFind)
+--[[
+	Найти значение в таблице
+
+	Возвращает индекс найденого числа
+]]
+function algorithm.find<Index, T>(Table: { [Index]: T }, value: T, startFind: Index?, endFind: number?): Index?
+	if endFind then
+		for i = startFind or 1, endFind do
+			if Table[i] == value then
+				return i
+			end
+		end
+
+		return nil
+	else
+		return table.find(Table, value, startFind)
+	end
 end
 
 --[[
@@ -122,7 +165,7 @@ end
 
 	Индекс найденного значения, или `nil`
 ]]
-function algorithm.find_if<T, Index>(Table: {[Index]: T}, callback: (value: T)->boolean, startFind: Index?, endFind: Index?): Index?
+function algorithm.find_if<T, Index>(Table: { [Index]: T }, callback: (value: T) -> boolean, startFind: Index?, endFind: Index?): Index?
 
 	for i = startFind or 1, endFind or #Table, 1 do
 		if callback(Table[i]) then
@@ -146,7 +189,7 @@ end
 
 	Индекс найденного значения, или `nil`
 ]]
-function algorithm.find_if_not<T, Index>(Table: {[Index]: T}, callback: (value: T)->boolean, startFind: Index?, endFind: Index?): Index?
+function algorithm.find_if_not<T, Index>(Table: { [Index]: T }, callback: (value: T) -> boolean, startFind: Index?, endFind: Index?): Index?
 
 	for i = startFind or 1, endFind or #Table, 1 do
 		if not callback(Table[i]) then
@@ -157,8 +200,13 @@ function algorithm.find_if_not<T, Index>(Table: {[Index]: T}, callback: (value: 
 	return nil
 end
 
+function algorithm.check_key<T, Index>(Table: { [Index]: T }, key: Index): boolean
+	
+	return not (Table[key] ~= nil)
 
-function search_check<T>(t: {[number]: T}, start: number, range: {T}): boolean
+end
+
+function search_check<T>(t: { [number]: T }, start: number, range: { T }): boolean
 
 	for i, v in pairs(range) do
 		if not (t[start+i] == v) then
@@ -172,8 +220,8 @@ end
 --[[
 	# Находит последовательность элеметов в таблице
 ]]
-function algorithm.search<T>(Table: {[number]: T}, range: {T}, start: number?, endFind: number?): number?
-	
+function algorithm.search<T>(Table: { [number]: T }, range: { T }, start: number?, endFind: number?): number?
+
 	for i = start or 1, endFind or #Table, 1 do
 		if search_check(Table, i-1, range) then
 			return i
@@ -186,7 +234,7 @@ end
 --[[
 	# Находит последовательность еэлеметов в таблице
 ]]
-function algorithm.search_n<T>(Table: {[number]: T}, range: {T}, start: number?, endFind: number?): number
+function algorithm.search_n<T>(Table: { [number]: T }, range: { T }, start: number?, endFind: number?): number
 	local counter = 0
 
 	for i = start or 1, endFind or #Table, 1 do
@@ -205,8 +253,24 @@ end
 
 	`Table` - Таблица, которую нужно отсортировать
 ]]
-function algorithm.sort(Table: {[any]: any})
-	table.sort(Table)
+function algorithm.sort(Table: { [any]: any }, startIndex: number?, endIndex: number?)
+
+	if startIndex or endIndex then
+		while not algorithm.is_sorted(Table, startIndex, endIndex) do
+			algorithm.callForAll(
+				Table,
+				startIndex,
+				endIndex-1,
+				function(i) 
+					if Table[i] > Table[i + 1] then
+						Table[i], Table[i + 1] = Table[i + 1], Table[i]
+					end
+				end
+			)
+		end
+	else
+		table.sort(Table)
+	end
 end
 
 --[[
@@ -218,8 +282,49 @@ end
 
 	`callback` - функция
 ]]
-function algorithm.sort_if<T>(Table: {[any]:T}, callback: (T, T)->boolean)
-	table.sort(Table, callback)
+function algorithm.sort_if<T>(Table: { [any]: T }, callback: (T, T) -> boolean, startIndex: number?, endIndex: number?)
+
+	if startIndex or endIndex then
+		while not algorithm.is_sorted(Table, startIndex, endIndex) do
+			algorithm.callForAll(
+				Table,
+				startIndex,
+				endIndex - 1,
+				function(i)
+					if callback(Table[i], Table[i + 1]) then
+						Table[i], Table[i + 1] = Table[i + 1], Table[i]
+					end
+				end
+			)
+		end
+	else
+		table.sort(Table, callback)
+	end
+end
+
+--[[
+	Сортировка по свойтву
+]]
+function algorithm.sort_by(Table: { { [any]: number } }, prop: string, startIndex: number?, endIndex: number?)
+
+	if startIndex or endIndex then
+		while not algorithm.is_sorted_by(Table, prop, startIndex, endIndex) do
+			algorithm.callForAll(
+				Table,
+				startIndex,
+				endIndex - 1,
+				function(i)
+					if Table[i][prop] > Table[i + 1][prop] then
+						Table[i], Table[i + 1] = Table[i + 1], Table[i]
+					end
+				end
+			)
+		end
+	else
+		table.sort(Table, function(a, b): boolean 
+			return a[prop] < b[prop]
+		end)
+	end
 end
 
 --[[
@@ -229,19 +334,69 @@ end
 
 	`Table` - таблица, которую нужно  проверить
 ]]
-function algorithm.is_sorted(Table: {[any]: any}, start: number?, endFind: number?): boolean
-	local ret: boolean = true
-	local last = nil
-	
-	for i = start or 1, endFind or #Table, 1 do
-		if last then
-			ret = ret and last < Table[i]
-		else
-			last = Table[i]
+function algorithm.is_sorted(Table: { [any]: number }, startIndex: number?, endIndex: number?): boolean
+
+	if startIndex or endIndex then
+		for i = startIndex or 1, (endIndex or #Table) - 1, 1 do
+			if Table[i] > Table[i + 1] then	-- сразу return как только найдено
+				return false
+			end
+		end
+	else
+		local last
+		for i, _ in pairs(Table) do
+			if last then
+				if last > Table[i] then
+					return false
+				end
+			else
+				last = Table[i]
+			end
 		end
 	end
 
-	return ret
+	return true
+end
+
+function algorithm.is_sorted_if<T>(Table: { [any]: T }, callback: (a: T, b: T) -> boolean, startIndex: number?, endIndex: number?): boolean
+	
+	if startIndex or endIndex then
+		for i = startIndex or 1, (endIndex or #Table) - 1, 1 do
+			if callback(Table[i], Table[i + 1]) then	-- сразу return как только найдено
+				return false
+			end
+		end
+	else
+		local last
+		for i, _ in pairs(Table) do
+			if last then
+				if callback(last, Table[i]) then
+					return false
+				end
+			else
+				last = Table[i]
+			end
+		end
+	end
+
+	return true
+end
+
+--[[
+	# Проверить, отсоритрованна ли таблица
+
+	## Params:
+
+	`Table` - таблица, которую нужно  проверить
+]]
+function algorithm.is_sorted_by(Table: { [any]: { [any]: number } }, prop: string, startIndex: number?, endIndex: number?): boolean
+
+	return algorithm.is_sorted_if(
+		Table,
+		function(a: { [any]: number }, b: { [any]: number }): boolean 
+			return a[prop] > b[prop]
+		end
+	)
 end
 
 --[[
@@ -257,24 +412,19 @@ end
 
 	`endIndex` - 
 ]]
-function algorithm.count<T, Index>(Table: {[Index]: T}, value: T, startIndex: Index?, endIndex: Index?): number
+function algorithm.count<T>(Table: {T}, value: T, startIndex: number?, endIndex: number?): number
 	local counter = 0
 
-	local function f(i: Index)
-		if Table[i] == value then
-			counter += 1
+	algorithm.callForAll(
+		Table,
+		startIndex,
+		endIndex,
+		function(i)
+			if Table[i] == value then
+				counter += 1
+			end
 		end
-	end
-
-	if startIndex or endIndex then
-		for i = startIndex or 1, endIndex or #Table, 1 do
-			f(i)
-		end
-	else
-		for i, _ in pairs(Table) do
-			f(i)
-		end
-	end
+	)
 
 	return counter
 end
@@ -286,14 +436,14 @@ end
 
 	`Table` - Таюлица, в которой искать
 ]]
-function algorithm.count_if<T, Index>(Table: {[Index]: T}, callback: (T)->boolean, startIndex: Index?, endIndex: Index?): number
+function algorithm.count_if<T>(Table: {T}, callback: (value: T) -> boolean, startIndex: number?, endIndex: number?): number
 	local counter = 0
 
 	algorithm.callForAll(
-		Table, 
-		startIndex, 
+		Table,
+		startIndex,
 		endIndex,
-		function(i: Index)
+		function(i)
 			if callback(Table[i]) then
 				counter += 1
 			end
@@ -318,11 +468,11 @@ end
 
 	Реверснутая таблица
 ]]
-function algorithm.reverse<Index, T>(Table: {[Index]: T}, startIndex: number?, endIndex: number?): {[Index]: T}
+function algorithm.reverse<Index, T>(Table: { [Index]: T }, startIndex: number?, endIndex: number?): { [Index]: T }
 
 	algorithm.callForAll(
-		Table, 
-		startIndex, 
+		Table,
+		startIndex,
 		endIndex,
 		function (i: Index)
 			Table[i], Table[#Table-i+1] = Table[#Table-i+1], Table[i]
@@ -335,14 +485,14 @@ end
 --[[
 	# Удалить все дубликаты из таблицы
 ]]
-function algorithm.unique<Index, T>(Table: {[Index]: T}, startIndex: number?, endIndex: number?): {[Index]: T}
+function algorithm.unique<Index, T>(Table: { [Index]: T }, startIndex: number?, endIndex: number?): { [Index]: T }
 	
 	local hash = {}
 	local res = {}
 
 	algorithm.callForAll(
-		Table, 
-		startIndex, 
+		Table,
+		startIndex,
 		endIndex,
 		function(i: Index)
 			if (not hash[Table[i]]) then
@@ -370,7 +520,7 @@ end
 
 	Сгенерированная таблица
 ]]
-function algorithm.generate<T>(generator: (i: number)->T, first: number, last: number): {T}
+function algorithm.generate<T>(generator: (i: number) -> T, first: number, last: number): { [number]: T }
 	local t = {}
 	
 	for i = first, last, 1 do
@@ -383,13 +533,13 @@ end
 --[[
 	Получить индекс и значение наибольшего элемента в таблице
 ]]
-function algorithm.max_element<Index, T>(Table: {[Index]: T}, startIndex: number?, endIndex: number?): utility.Pair<Index, T>
+function algorithm.max_element<Index, T>(Table: { [Index]: T }, startIndex: number?, endIndex: number?): { Num: T, Index: Index}
 	local greatestNumber = -math.huge
 	local k
 
 	algorithm.callForAll(
-		algorithm.copy(Table, startIndex, endIndex), 
-		startIndex, 
+		algorithm.copy(Table, startIndex, endIndex),
+		startIndex,
 		endIndex,
 		function (i: Index)
 			if Table[i] > greatestNumber then
@@ -399,40 +549,46 @@ function algorithm.max_element<Index, T>(Table: {[Index]: T}, startIndex: number
 		end
 	)
 
-	return utility.Pair.new(greatestNumber, k)
+	return {
+		Num = greatestNumber,
+		Index = k
+	}
 end
 
 --[[
 	Получить индекс и значение наменьшего элемента в таблице
 ]]
-function algorithm.min_element<Index, T>(Table: {[Index]: T}, startIndex: number?, endIndex: number?): utility.Pair<Index, T>
-	local greatestNumber = math.huge
+function algorithm.min_element<Index, T>(Table: { [Index]: T }, startIndex: number?, endIndex: number?): { Num: T, Index: Index }
+	local minNumber = math.huge
 	local k
 
 	algorithm.callForAll(
-		algorithm.copy(Table, startIndex, endIndex), 
-		startIndex, 
+		algorithm.copy(Table, startIndex, endIndex),
+		startIndex,
 		endIndex,
 		function (i: Index)
-			if Table[i] < greatestNumber then
-				greatestNumber = Table[i]
+			if Table[i] < minNumber then
+				minNumber = Table[i]
 				k = i
 			end
 		end
 	)
 
-	return utility.Pair.new(greatestNumber, k)
+	return {
+		Num = minNumber,
+		Index = k
+	}
 end
 
 --[[
 	# Копирует таблицу по одному свойству
 ]]
-function algorithm.copy_by_prop<Index>(Table: {[Index]: {any}}, prop: string, startIndex: number?, endIndex: number?)
+function algorithm.copy_by_prop<Index, T>(Table: { [Index]: {T} }, prop: string, startIndex: number?, endIndex: number?): { [Index]: T }
 	local t = {}
 
 	algorithm.callForAll(
-		Table, 
-		startIndex, 
+		Table,
+		startIndex,
 		endIndex,
 		function(i: Index)
 			t[i] = Table[i][prop]
@@ -445,12 +601,12 @@ end
 --[[
 	# Копирует таблицу по с списку свойств
 ]]
-function algorithm.copy_by_props<Index>(Table: {[Index]: {any}}, props: {string}, startIndex: number?, endIndex: number?): {[Index]: {}}
+function algorithm.copy_by_props<Index>(Table: { [Index]: {any} }, props: { string }, startIndex: number?, endIndex: number?): { [Index]: {} }
 	local t = {}
 
 	algorithm.callForAll(
-		Table, 
-		startIndex, 
+		Table,
+		startIndex,
 		endIndex,
 		function(i: Index)
 			for _, prop in pairs(props) do
@@ -461,11 +617,14 @@ function algorithm.copy_by_props<Index>(Table: {[Index]: {any}}, props: {string}
 	return t
 end
 
-function algorithm.copy<T>(Table: {[number]: T}, startIndex: number?, endIndex: number?): {[number]: T}
+--[[
+	Копировать элементы таблицы
+]]
+function algorithm.copy<T, Index>(Table: {[Index]: T}, startIndex: number?, endIndex: number?): { [Index]: T }
 	
 	if startIndex or endIndex then
 		local t = {}
-		
+
 		for i = startIndex or 1, endIndex or #Table, 1 do
 			t[i] = Table[i]
 		end
@@ -479,14 +638,14 @@ end
 --[[
 	Копировать элементы таблицы если элемент соответсвует условию
 ]]
-function algorithm.copy_if<T, Index>(Table: {[Index]: T}, callback: (value: T)->boolean, startIndex: number?, endIndex: number?): {[Index]: T}
+function algorithm.copy_if<T, Index>(Table: { [Index]: T }, callback: (value: T)->boolean, startIndex: number?, endIndex: number?): { [Index]: T }
 	local t = {}
 
 	algorithm.callForAll(
-		Table, 
+		Table,
 		startIndex,
-		endIndex, 
-		function(i: Index): nil 
+		endIndex,
+		function(i: Index) 
 			if callback(Table[i]) then
 				t[i] = Table[i]
 			end
@@ -499,9 +658,9 @@ end
 function algorithm.fill<T>(Table: {T}, value: T, startIndex: number?, endIndex: number?)
 
 	algorithm.callForAll(
-		Table, 
+		Table,
 		startIndex,
-		endIndex, 
+		endIndex,
 		function(i)
 			Table[i] = value
 		end
@@ -515,28 +674,31 @@ end
 function algorithm.remove(Table: {[any]: any}, startIndex: number?, endIndex: number?)
 	
 	algorithm.callForAll(
-		Table, 
+		Table,
 		startIndex,
-		endIndex, 
+		endIndex,
 		function(i)
 			table.remove(Table, i)
 		end
-	)	
+	)
 end
 
-function algorithm.remove_if<T, Index>(Table: {[Index]: T}, callback: (value: T)->boolean, startIndex: number?, endIndex: number?)
-	
+--[[
+	Удалить элементы соответсвующие условию
+]]
+function algorithm.remove_if<T>(Table: {T}, callback: (value: T)->boolean, startIndex: number?, endIndex: number?)
+
 	algorithm.callForAll(
-		Table, 
+		Table,
 		startIndex,
-		endIndex, 
+		endIndex,
 		function(i)
 			if callback(Table[i]) then
 				table.remove(Table, i)
 			end
 		end
 	)
-	
+
 end
 
 --[[

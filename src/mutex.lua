@@ -3,6 +3,9 @@
 ]]
 local mutex = {}
 
+--[[
+	mutex struct
+]]
 export type mutex = {
 	locked: boolean,
 	connect: BindableEvent,
