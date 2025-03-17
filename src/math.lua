@@ -15,12 +15,16 @@ function _math.ln(n: number): number
 	return math.log(n, _math.e)
 end
 
+function _math.lg(n: number): number
+	return math.log(n)
+end
+
 --[[
 	Кеш факториалов
 
 	не трогайте ручками его!
 ]]
-_math.factoialCache = {
+ local factoialCache = {
 	[0] =	1,	-- 0!
 	[1] =	1,	-- 1!
 	[2] =	2,	-- 2!
@@ -28,24 +32,29 @@ _math.factoialCache = {
 	[4] =	24,	-- 4!
 	[5] =	120,	-- 5!
 	[6] =	720,	-- 6!
-	[7] =	5040,	-- 7!
-	[8] =	40320,	-- 8!
-	[9] =	362880,	-- 9!
-	[10] =	3628800,	-- 10!
-	[11] =	39916800,	-- 11!
-	[12] =	479001600,	-- 12!
-	[13] =	6227020800,	-- 13!
-	[14] =	87178291200,	-- 14!
-	[15] =	1307674368000,	-- 15!
-	[16] =	20922789888000,	-- 16!
-	[17] =	355687428096000,	-- 17!
-	[18] =	6402373705728000, 	-- 18!
-	[19] =	121645100408832000,	-- 19!
-	[20] =	2432902008176640000,	-- 20!
-	[21] =	51090942171709440000	-- 21!
+	[7] =	5_040,	-- 7!
+	[8] =	40_320,	-- 8!
+	[9] =	362_880,	-- 9!
+	[10] =	3_628_800,	-- 10!
+	[11] =	39_916_800,	-- 11!
+	[12] =	479_001_600,	-- 12!
+	[13] =	6_227_020_800,	-- 13!
+	[14] =	87_178_291_200,	-- 14!
+	[15] =	1_307_674_368_000,	-- 15!
+	[16] =	20_922_789_888_000,	-- 16!
+	[17] =	355_687_428_096_000,	-- 17!
+	[18] =	6_402_373_705_728_000, 	-- 18!
+	[19] =	121_645_100_408_832_000,	-- 19!
+	[20] =	2_432_902_008_176_640_000,	-- 20!
+	[21] =	51_090_942_171_709_440_000	-- 21!
 }
 
-_math.defaultDelta = 0e-4
+--[[
+	delta for calculate integral
+
+	чем меньше, тем точнее и медленне
+]]
+_math.defaultDelta = 0.001
 
 --[[
 	Гамма функция
@@ -54,17 +63,15 @@ _math.defaultDelta = 0e-4
 
 	`∫(-(ln(x))^n)dx`
 ]]
-function _math.gamma(n: number)
+function _math.gamma(n: number): number
 	return  _math.integral(
 		function(x: number): number 
-			return math.pow(-_math.ln(x), n-1)
+			return math.pow(-_math.ln(x), n - 1)
 		end, 
 		0, 
 		1
 	)
 end
-
-
 
 --[[
 	Факториал
@@ -72,21 +79,16 @@ end
 	return n!
 ]]
 function _math.factorial(n: number): number
-
-	if _math.factoialCache[n] ~= nil then	-- if cache not exist
-		local ret
-		if n % 1 == 0 then
-			ret = _math.factorial(n-1) * n
+	
+	if factoialCache[n] == nil then	-- if cache not exist
+		if n % 1 == 0 then	-- if n is integer
+			factoialCache[n] = _math.factorial(n - 1) * n
 		else
-			ret = _math.gamma(n + 1)
+			factoialCache[n] = _math.gamma(n + 1)
 		end
-
-		_math.factoialCache[n] = ret
-		
-		return ret
-	else
-		return _math.factoialCache[n]
 	end
+
+	return factoialCache[n]
 
 end
 
@@ -104,14 +106,14 @@ end
 
 	delta ≠ 0
 ]]
-function _math.integral(f: (x: number)->number, a: number, b: number, delta: number?): number
-	assert(delta > 0)
+function _math.integral(f: (x: number) -> number, a: number, b: number, delta: number?): number
 
-	local n = 0
 	local _delta = delta or _math.defaultDelta
 
+	local n = 0
+
 	for i = a, b, _delta do
-		b += f(i) * _delta
+		n += f(i) * _delta
 	end
 
 	return n

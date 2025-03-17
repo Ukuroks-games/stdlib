@@ -6,30 +6,46 @@ local mutex = {}
 --[[
 	mutex struct
 ]]
-export type mutex = {
+export type Mutex = {
+	--[[
+		Now is locked
+	]]
 	locked: boolean,
+
 	connect: BindableEvent,
-	
-	lock: (self: mutex)->nil,
 
-	unlock: (self: mutex)->nil,
+	--[[
+		Lock mutex
+	]]
+	lock: (self: Mutex) -> nil,
 
-	wait: (self: mutex)->nil,
-	
-	Destroy: (self: mutex)->nil
+	--[[
+		Unlock mutex
+	]]
+	unlock: (self: Mutex) -> nil,
+
+	--[[
+
+	]]
+	wait: (self: Mutex) -> nil,
+
+	--[[
+		Destroy mutex
+	]]
+	Destroy: (self: Mutex) -> nil
 }
 
 --[[
 	Lock mutex
 ]]
-function mutex.lock(self: mutex)
+function mutex.lock(self: Mutex)
 	self.locked = true
 end
 
 --[[
 	Unlock mutex
 ]]
-function mutex.unlock(self: mutex)
+function mutex.unlock(self: Mutex)
 	self.locked = false
 	self.connect:Fire()
 end
@@ -37,7 +53,7 @@ end
 --[[
 	Wait if locked
 ]]
-function mutex.wait(self: mutex)
+function mutex.wait(self: Mutex)
 	if self.locked then
 		self.connect.Event:Wait()
 	end
@@ -46,14 +62,14 @@ end
 --[[
 	Destroy mutex
 ]]
-function mutex.Destroy(self: mutex)
+function mutex.Destroy(self: Mutex)
 	self.connect:Destroy()
 end
 
 --[[
 	mutex constructor
 ]]
-function mutex.new(lock: boolean?): mutex
+function mutex.new(lock: boolean?): Mutex
 	return {
 		locked = lock or false,
 		connect = Instance.new("BindableEvent"),

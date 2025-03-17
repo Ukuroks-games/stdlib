@@ -40,8 +40,7 @@ local cases = {
 
 for i, expr in ipairs (cases) do
     testlib:AddTest(function(): boolean 
-        assert (load ('return ' .. expr, nil, 't', context)())
-        return true -- if assert pass, test passed
+        return load ('return ' .. expr, nil, 't', context)()
     end, "complex test ".. i):Run()
 end
 
