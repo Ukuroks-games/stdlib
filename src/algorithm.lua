@@ -138,7 +138,7 @@ end
 
 	Возвращает индекс найденого числа
 ]]
-function algorithm.find<Index, T>(Table: { [Index]: T }, value: T, startFind: Index?, endFind: number?): Index?
+function algorithm.find<Index, T>(Table: { [Index]: T }, value: T, startFind: Index?, endFind: Index?): Index?
 	if endFind then
 		for i = startFind or 1, endFind do
 			if Table[i] == value then
@@ -200,16 +200,22 @@ function algorithm.find_if_not<T, Index>(Table: { [Index]: T }, callback: (value
 	return nil
 end
 
+--[[
+
+]]
 function algorithm.check_key<T, Index>(Table: { [Index]: T }, key: Index): boolean
 	
 	return not (Table[key] ~= nil)
 
 end
 
+--[[
+
+]]
 function search_check<T>(t: { [number]: T }, start: number, range: { T }): boolean
 
 	for i, v in pairs(range) do
-		if not (t[start+i] == v) then
+		if not (t[start + i] == v) then
 			return false
 		end
 	end
@@ -219,11 +225,13 @@ end
 
 --[[
 	# Находит последовательность элеметов в таблице
+
+	возвращает индекс начала этой последовательности или nil
 ]]
 function algorithm.search<T>(Table: { [number]: T }, range: { T }, start: number?, endFind: number?): number?
 
 	for i = start or 1, endFind or #Table, 1 do
-		if search_check(Table, i-1, range) then
+		if search_check(Table, i - 1, range) then
 			return i
 		end
 	end
@@ -232,13 +240,13 @@ function algorithm.search<T>(Table: { [number]: T }, range: { T }, start: number
 end
 
 --[[
-	# Находит последовательность еэлеметов в таблице
+	# Находит последовательность элеметов в таблице
 ]]
 function algorithm.search_n<T>(Table: { [number]: T }, range: { T }, start: number?, endFind: number?): number
 	local counter = 0
 
 	for i = start or 1, endFind or #Table, 1 do
-		if search_check(Table, i-1) then
+		if search_check(Table, i - 1) then
 			counter += 1
 		end
 	end
@@ -412,7 +420,7 @@ end
 
 	`endIndex` - 
 ]]
-function algorithm.count<T>(Table: {T}, value: T, startIndex: number?, endIndex: number?): number
+function algorithm.count<T, Index>(Table: { [Index]: T }, value: T, startIndex: number?, endIndex: number?): number
 	local counter = 0
 
 	algorithm.callForAll(
@@ -436,7 +444,7 @@ end
 
 	`Table` - Таюлица, в которой искать
 ]]
-function algorithm.count_if<T>(Table: {T}, callback: (value: T) -> boolean, startIndex: number?, endIndex: number?): number
+function algorithm.count_if<T, Index>(Table: { [Index]: T }, callback: (value: T) -> boolean, startIndex: number?, endIndex: number?): number
 	local counter = 0
 
 	algorithm.callForAll(
@@ -475,7 +483,7 @@ function algorithm.reverse<Index, T>(Table: { [Index]: T }, startIndex: number?,
 		startIndex,
 		endIndex,
 		function (i: Index)
-			Table[i], Table[#Table-i+1] = Table[#Table-i+1], Table[i]
+			Table[i], Table[#Table - i + 1] = Table[#Table - i + 1], Table[i]
 		end
 	)
 
@@ -496,7 +504,7 @@ function algorithm.unique<Index, T>(Table: { [Index]: T }, startIndex: number?, 
 		endIndex,
 		function(i: Index)
 			if (not hash[Table[i]]) then
-				res[#res+1] = Table[i] -- you could print here instead of saving to result table if you wanted
+				res[#res + 1] = Table[i] -- you could print here instead of saving to result table if you wanted
 				hash[Table[i]] = true
 			end
 		end
@@ -533,7 +541,7 @@ end
 --[[
 	Получить индекс и значение наибольшего элемента в таблице
 ]]
-function algorithm.max_element<Index, T>(Table: { [Index]: T }, startIndex: number?, endIndex: number?): { Num: T, Index: Index}
+function algorithm.max_element<Index, T>(Table: { [Index]: T }, startIndex: number?, endIndex: number?): { Num: T, Index: Index }
 	local greatestNumber = -math.huge
 	local k
 
@@ -566,7 +574,7 @@ function algorithm.min_element<Index, T>(Table: { [Index]: T }, startIndex: numb
 		Table,
 		startIndex,
 		endIndex,
-		function (i: Index)
+		function (i)
 			if Table[i] < minNumber then
 				minNumber = Table[i]
 				k = i
@@ -590,7 +598,7 @@ function algorithm.min_key<Index, T>(Table: { [Index]: T }, startIndex: number?,
 		Table,
 		startIndex,
 		endIndex,
-		function (i: Index)
+		function (i)
 			if i < minNumber then
 				minNumber = i
 			end
@@ -610,7 +618,7 @@ function algorithm.max_key<Index, T>(Table: { [Index]: T }, startIndex: number?,
 		Table,
 		startIndex,
 		endIndex,
-		function (i: Index)
+		function (i)
 			if i > minNumber then
 				minNumber = i
 			end
@@ -631,7 +639,7 @@ function algorithm.copy_by_prop<Index, T>(Table: { [Index]: {T} }, prop: string,
 		Table,
 		startIndex,
 		endIndex,
-		function(i: Index)
+		function(i)
 			t[i] = Table[i][prop]
 		end
 	)
@@ -649,7 +657,7 @@ function algorithm.copy_by_props<Index>(Table: { [Index]: {any} }, props: { stri
 		Table,
 		startIndex,
 		endIndex,
-		function(i: Index)
+		function(i)
 			for _, prop in pairs(props) do
 				t[i][prop] = Table[i][prop]
 			end
@@ -661,9 +669,10 @@ end
 --[[
 	Копировать элементы таблицы
 ]]
-function algorithm.copy<T, Index>(Table: {[Index]: T}, startIndex: number?, endIndex: number?): { [Index]: T }
+function algorithm.copy<T, Index>(Table: { [Index]: T }, startIndex: number?, endIndex: number?): { [Index]: T }
 	
 	if startIndex or endIndex then
+		-- copy
 		local t = {}
 
 		for i = startIndex or 1, endIndex or #Table, 1 do
@@ -680,6 +689,8 @@ end
 	Копировать элементы таблицы если элемент соответсвует условию
 ]]
 function algorithm.copy_if<T, Index>(Table: { [Index]: T }, callback: (value: T)->boolean, startIndex: number?, endIndex: number?): { [Index]: T }
+	
+	-- copy
 	local t = {}
 
 	algorithm.callForAll(

@@ -15,9 +15,9 @@ testlib:AddTest(
 
 testlib:AddTest(
 	function(): boolean 
-		return 3.3 < math.factorial(2.5) and math.factorial(2.5) < 3.4 and 
-			0.8 < math.factorial(0.5) and math.factorial(0.5) < 0.9 and
-			119_292.461 < math.factorial(2.5) and math.factorial(8.5) < 119_292.5
+		return math.floatcmp(math.factorial(2.5), 3.323_350_970) and 
+			math.floatcmp(math.factorial(0.5), 0.886_226_9) and
+			math.floatcmp(math.factorial(8.5), 119_292.461_994)
 	end,
 	"Float factorial"
 ):Run()
