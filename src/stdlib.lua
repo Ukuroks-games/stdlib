@@ -4,6 +4,7 @@ return {
 	algorithm = require(script.Parent.algorithm),
 	queue = require(script.Parent.queue),
 	utility = require(script.Parent.utility),
+	mutex = require(script.Parent.mutex),
 	complex = require(script.Parent.complex),
 	math = require(script.Parent.math),
 	events = require(script.Parent.Events)
