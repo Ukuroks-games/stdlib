@@ -68,6 +68,8 @@ end
 
 --[[
 	mutex constructor
+
+	by default is unlocked
 ]]
 function mutex.new(lock: boolean?): Mutex
 	return {

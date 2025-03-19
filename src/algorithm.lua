@@ -117,6 +117,14 @@ end
 
 --[[
 	# суммирует или сворачивает ряд элементов 
+
+	`Table`	- 
+
+	`startIndex`	- 
+
+	`endIndex`	- 
+
+	`init`	- 
 ]]
 function algorithm.accumulate(Table: { number }, startIndex: number?, endIndex: number?, init: number?): number
 	local sum = init or 0
@@ -137,6 +145,14 @@ end
 	Найти значение в таблице
 
 	Возвращает индекс найденого числа
+
+	`Table`	- 
+
+	`value - 
+
+	`startIndex`	- 
+
+	`endIndex`	- 
 ]]
 function algorithm.find<Index, T>(Table: { [Index]: T }, value: T, startFind: Index?, endFind: Index?): Index?
 	if endFind then
@@ -201,21 +217,24 @@ function algorithm.find_if_not<T, Index>(Table: { [Index]: T }, callback: (value
 end
 
 --[[
+	Проверить есть ли ключ в таблице
 
+	`Table`	- 
+
+	`key`	- 
 ]]
 function algorithm.check_key<T, Index>(Table: { [Index]: T }, key: Index): boolean
 	
-	return not (Table[key] ~= nil)
+	return Table[key] ~= nil
 
 end
 
 --[[
-
+	Функция сравнения
 ]]
-function search_check<T>(t: { [number]: T }, start: number, range: { T }): boolean
-
-	for i, v in pairs(range) do
-		if not (t[start + i] == v) then
+local function defaultSearchCompare<T>(Table: { [number]: T}, i: number, range: { [number]: T }): boolean
+	for j = 1, #range do
+		if Table[i + j] ~= range[j] then
 			return false
 		end
 	end
@@ -227,11 +246,20 @@ end
 	# Находит последовательность элеметов в таблице
 
 	возвращает индекс начала этой последовательности или nil
-]]
-function algorithm.search<T>(Table: { [number]: T }, range: { T }, start: number?, endFind: number?): number?
 
-	for i = start or 1, endFind or #Table, 1 do
-		if search_check(Table, i - 1, range) then
+	
+	`Table`	- 
+
+	`startIndex`	- 
+
+	`endIndex`	- 
+]]
+function algorithm.search<T>(Table: { [number]: T }, range: { [number]: T }, startIndex: number?, endIndex: number?, compare: ( (i: number, range: { [number]: T }) -> boolean )? ): number?
+
+	local cmp = compare or defaultSearchCompare
+
+	for i = startIndex or 1, endIndex or #Table, 1 do
+		if cmp(Table, i, range) then
 			return i
 		end
 	end
@@ -242,11 +270,13 @@ end
 --[[
 	# Находит последовательность элеметов в таблице
 ]]
-function algorithm.search_n<T>(Table: { [number]: T }, range: { T }, start: number?, endFind: number?): number
+function algorithm.search_n<T>(Table: { [number]: T }, range: { T }, start: number?, endFind: number?, compare: ( (i: number, range: { [number]: T }) -> boolean )? ): number
 	local counter = 0
 
+	local cmp = compare or defaultSearchCompare
+
 	for i = start or 1, endFind or #Table, 1 do
-		if search_check(Table, i - 1) then
+		if cmp(Table, i, range) then
 			counter += 1
 		end
 	end
@@ -336,37 +366,15 @@ function algorithm.sort_by(Table: { { [any]: number } }, prop: string, startInde
 end
 
 --[[
-	# Проверить, отсоритрованна ли таблица
+	# Проверить, отсоритрованна ли таблица по условию
 
 	## Params:
 
 	`Table` - таблица, которую нужно  проверить
+
+	`callback` - функция сравнивающая прошлый элемент таблицы и текуший
 ]]
-function algorithm.is_sorted(Table: { [any]: number }, startIndex: number?, endIndex: number?): boolean
-
-	if startIndex or endIndex then
-		for i = startIndex or 1, (endIndex or #Table) - 1, 1 do
-			if Table[i] > Table[i + 1] then	-- сразу return как только найдено
-				return false
-			end
-		end
-	else
-		local last
-		for i, _ in pairs(Table) do
-			if last then
-				if last > Table[i] then
-					return false
-				end
-			else
-				last = Table[i]
-			end
-		end
-	end
-
-	return true
-end
-
-function algorithm.is_sorted_if<T>(Table: { [any]: T }, callback: (a: T, b: T) -> boolean, startIndex: number?, endIndex: number?): boolean
+function algorithm.is_sorted_if<T>(Table: { [any]: T }, callback: (last: T, current: T) -> boolean, startIndex: number?, endIndex: number?): boolean
 	
 	if startIndex or endIndex then
 		for i = startIndex or 1, (endIndex or #Table) - 1, 1 do
@@ -388,6 +396,25 @@ function algorithm.is_sorted_if<T>(Table: { [any]: T }, callback: (a: T, b: T) -
 	end
 
 	return true
+end
+
+--[[
+	# Проверить, отсоритрованна ли таблица (в порядке возрастания)
+
+	## Params:
+
+	`Table` - таблица, которую нужно  проверить
+]]
+function algorithm.is_sorted(Table: { [any]: number }, startIndex: number?, endIndex: number?): boolean
+
+	return algorithm.is_sorted_if(
+		Table, 
+		function(last: number, current: number): boolean 
+			return last > current
+		end,
+		startIndex,
+		endIndex
+	)
 end
 
 --[[
@@ -609,7 +636,7 @@ function algorithm.min_key<Index, T>(Table: { [Index]: T }, startIndex: number?,
 end
 
 --[[
-	Получить найбольший индекс в таблице
+	Получить наибольший индекс в таблице
 ]]
 function algorithm.max_key<Index, T>(Table: { [Index]: T }, startIndex: number?, endIndex: number?): number
 	local minNumber = -math.huge
@@ -708,9 +735,9 @@ function algorithm.copy_if<T, Index>(Table: { [Index]: T }, callback: (value: T)
 end
 
 --[[
-
+	Заполнить таблицу значением
 ]]
-function algorithm.fill<T>(Table: { T }, value: T, startIndex: number?, endIndex: number?)
+function algorithm.fill<T>(Table: { [any]: T }, value: T, startIndex: number?, endIndex: number?)
 
 	algorithm.callForAll(
 		Table,

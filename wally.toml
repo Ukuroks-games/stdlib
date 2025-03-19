@@ -1,7 +1,7 @@
 [package]
 name = "egor00f/stdlib"
 description = "Library that implements some algorithms"
-version = "0.1.9"
+version = "0.1.10"
 registry = "https://github.com/UpliftGames/wally-index"
 realm = "shared"
 license = "MIT"
@@ -13,7 +13,7 @@ private = false
 
 
 [dev-dependencies]
-testlib = "egor00f/testlib@0.1.4"
+testlib = "egor00f/testlib@>=0.1.4"
 
 
 [place]
