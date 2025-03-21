@@ -9,10 +9,13 @@ function complex:new (r, i)
 	return setmetatable (type (r) == 'table' and r or { r = r, i = i or 0 }, self)
 end
 
-setmetatable (complex, {
-	__call = function (tbl, r, i)
-		return complex:new (r, i)
-	end }
+setmetatable (
+	complex, 
+	{
+		__call = function (tbl, r, i)
+			return complex:new (r, i)
+		end
+	}
 )
 
 complex.i = complex (0, 1)
@@ -69,7 +72,10 @@ function complex.polar (abs, arg)
 		or arg == math.pi / 2	and complex (0, abs)
 		or arg == math.pi   	and complex (-abs, 0)
 		or arg == math.pi * 1.5	and complex (0, -abs)
-		or complex (abs * math.cos (arg), abs * math.sin (arg))
+		or complex (
+			abs * math.cos (arg), 
+			abs * math.sin (arg)
+		)
 end
 
 function complex:arg ()
@@ -95,8 +101,7 @@ function complex:__pow (power)
 	-- de Moivre:
 		local n = im2 == 0 and re2 or nil
 		if n and math.floor (n) == n then
-			local abs, arg = self:abs (), self:arg ()
-			return complex.polar (abs ^ n, n * arg)
+			return complex.polar ( self:abs() ^ n, n * self:arg())
 		end
 	end
 end
@@ -106,9 +111,12 @@ function complex:roots (n)
 	if n <= 1 then
 		return self ^ -n
 	end
+
 	local values = {}
-	local abs, arg = self:abs () ^ (1 / n), self:arg ()
+	local abs = self:abs () ^ (1 / n)
+	local arg = self:arg ()
 	local double_pi = math.pi * 2
+
 	for k = 0, n - 1 do
 		values [k + 1] = complex.polar (abs, (arg + double_pi * k) / n)
 	end
@@ -128,7 +136,8 @@ end
 
 function complex:tostring (i, prefix, parentheses)
 	local im = type (i) == 'string' and i or 'i'
-	local r, i = self.r, self.i
+	local r = self.r
+	local i = self.i
 
 	local r_str = (r ~= 0 or i == 0) and r or ''
 	local i_str = i ~= 0 and (prefix and im .. math.abs (i) or (math.abs (i) == 1 and '' or math.abs (i)) .. im) or ''
@@ -136,9 +145,11 @@ function complex:tostring (i, prefix, parentheses)
 	local sign = r ~= 0 and i > 0 and '+' or i < 0 and '-' or ''
 	
 	local str = r_str .. space .. sign .. space .. i_str
+
 	if parentheses then
 		str = '(' .. str .. ')'
 	end
+
 	return str
 end
 
