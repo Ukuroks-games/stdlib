@@ -5,15 +5,19 @@ local algorithm = require(ReplicatedStorage.Packages.algorithm)
 
 
 testlib:AddTest(
-	function(): boolean  
-		return algorithm.search({1, 2, 3, 4, 5, 6, 7, 8, 9}, {4, 5, 6}) == 3
-	end,
-	"search"
-): Run()
+	testlib.test.new(
+		script.Name,
+		function(): boolean  
+			return algorithm.search({1, 2, 3, 4, 5, 6, 7, 8, 9}, {4, 5, 6}) == 3
+		end
+	)
+)
 
 testlib:AddTest(
-	function(): boolean  
-		return algorithm.search({1, 2, 3, 4, 5, 6, 7, 8, 9}, {4, 5, 6}, 1, 8) == 3
-	end,
-	"search on range"
-): Run()
+	testlib.test.new(
+		script.Name .. " on range",
+		function(): boolean  
+			return algorithm.search({1, 2, 3, 4, 5, 6, 7, 8, 9}, {4, 5, 6}, 1, 8) == 3
+		end
+	)
+)

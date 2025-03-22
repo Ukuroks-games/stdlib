@@ -39,8 +39,13 @@ local cases = {
 }
 
 for i, expr in ipairs (cases) do
-    testlib:AddTest(function(): boolean 
-        return load ('return ' .. expr, nil, 't', context)()
-    end, "complex test ".. i):Run()
+    testlib:AddTest(
+        testlib.test.new(
+            script.Name .. i,
+            function(): boolean 
+                return load ('return ' .. expr, nil, 't', context)()
+            end
+        )
+    )
 end
 
