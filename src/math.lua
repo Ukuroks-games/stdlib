@@ -1,3 +1,4 @@
+local algorithm = require(script.Parent.algorithm)
 --[[
 	Расширенная математическая библиотека
 
@@ -67,11 +68,13 @@ _math.defaultDelta = 1e-5
 function _math.factorialZ(n: number): number
 	assert(n >= 0, "Complex Infinity")
 
-	if factoialCache[n] == nil then
-		factoialCache[n] = _math.factorialZ(n - 1) * n
-	end
-
-	return factoialCache[n]
+	return algorithm.cached_calc(
+		factoialCache,
+		n, 
+		function(val)
+			return _math.factorialZ(n - 1) * n
+		end
+	)
 end
 
 --[[
@@ -134,34 +137,49 @@ end
 	Кеширует свои значения
 ]]
 function _math.gamma(n: number): number
-	if GammaCache[n] == nil then	-- if cache not exist, calculate it
-		if n % 1 == 0 and n >= 1 then
-			GammaCache[n] = _math.factorialZ(n - 1)
-		else
-			GammaCache[n] = gamma(n)
-		end
-	end
 	
-	return  GammaCache[n]
+	return algorithm.cached_calc(
+		GammaCache,
+		n,
+		function(val)
+			if n % 1 == 0 and n >= 1 then
+				return _math.factorialZ(n - 1)
+			else
+				return gamma(n)
+			end
+		end
+	)
 end
 
 --[[
 	Cache for beta function
 ]]
-local BetaChache = {}
+local BetaChache = {
+	[{x = 1, y = 1}] = 1,
+	[{x = 1, y = 2}] = 0.5,
+	[{x = 1, y = 3}] = 1 / 3,
+	[{x = 1, y = 4}] = 0.25,
+	[{x = 1, y = 5}] = 0.2,
+	[{x = 1, y = 6}] = 1 / 6,
+	[{x = 2, y = 0.5}] = 4 / 3,
+	[{x = 2, y = 1}] = 0.5,
+	[{x = 2, y = 2}] = 1 / 6,
+	[{x = 2, y = 3}] = 1 / 13,
+	[{x = 2, y = 4}] = 0.05
+}
 
 --[[
 		Beta function
 ]]
 function _math.beta(x: number, y: number): number
 
-	local args = {x = x, y = y}
-
-	if BetaChache[args] == nil then
-		BetaChache[args] = (_math.gamma(x) * _math.gamma(y)) / _math.gamma(x + y)
-	end
-
-	return BetaChache[args]
+	return algorithm.cached_calc(
+		BetaChache,
+		{x = x, y = y},
+		function(val)
+			return (_math.gamma(val.x) * _math.gamma(val.y)) / _math.gamma(val.x + val.y)
+		end	
+	)
 end
 
 --[[
@@ -170,16 +188,18 @@ end
 	return n!
 ]]
 function _math.factorial(n: number): number
-	
-	if factoialCache[n] == nil then	-- if cache not exist
-		if n % 1 == 0 then	-- if n is integer
-			factoialCache[n] = _math.factorialZ(n - 1) * n
-		else
-			factoialCache[n] = _math.gamma(n + 1)
-		end
-	end
 
-	return factoialCache[n]
+	return algorithm.cached_calc(
+		factoialCache, 
+		n, 
+		function(val)
+			if n % 1 == 0 then	-- if n is integer
+				return _math.factorialZ(val - 1) * val
+			else
+				return _math.gamma(val + 1)
+			end
+		end
+	)
 
 end
 
@@ -200,7 +220,6 @@ end
 	+ delta > 0 ⇒ a < b
 	+ delta < 0 ⇒ a > b
 
-	
 	> интересное наблюдение: количество верных цифр d результаьте равно кол-ву нулей в delta
 ]]
 function _math.integral(f: (x: number) -> number, a: number, b: number, delta: number?): number

@@ -790,4 +790,16 @@ function algorithm.average(t: { number }): number
 	return algorithm.accumulate(t) / #t
 end
 
+--[[
+	Вычислить что-то и закешировать это. Если в кеше значения нет этого, то посчитатьт и записать в кеш
+]]
+function algorithm.cached_calc<ARG, VALUE>(cacheTable: { [ARG]: VALUE }, val: ARG, calc: (val: ARG) -> VALUE): VALUE
+	
+	if cacheTable[val] == nil then
+		cacheTable[val] = calc(val)
+	end
+	
+	return cacheTable[val]
+end
+
 return algorithm
