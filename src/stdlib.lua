@@ -7,5 +7,6 @@ return {
 	mutex = require(script.Parent.mutex),
 	complex = require(script.Parent.complex),
 	math = require(script.Parent.math),
-	events = require(script.Parent.Events)
+	events = require(script.Parent.Events),
+	Part = require(script.Parent.Part)
 }

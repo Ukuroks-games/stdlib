@@ -1,5 +1,7 @@
 --[[
 	Расширенная математическая библиотека
+
+	точность в любом случае идёт нахуй
 ]]
 local _math = {}
 
@@ -18,9 +20,14 @@ end
 _math.lg = math.log10
 
 --[[
-	Кеш факториаловs
+	Кеш факториалов
+
+	чтоб не напряготь комп и безтого медленным lua кодом
 ]]
  local factoialCache = {
+	[0.5] = math.sqrt(math.pi) / 2,
+	[1.5] = 3 * math.sqrt(math.pi) / 4,
+	[2.5] = 15 * math.sqrt(math.pi) / 8,
 	[0] =	1,	-- 0!
 	[1] =	1,	-- 1!
 	[2] =	2,	-- 2!
@@ -71,9 +78,21 @@ end
 	Кеш Гамма функции
 ]]
 local GammaCache = {
-	--[0.5] = math.sqrt(math.pi),
+	[1] = 1,
+	[2] = 2,
+	[3] = 3,
+	[4] = 6,
+	[5] = 24,
+	[6] = 120,
+	[7] = 720,
+	[8] = 5_040,
+	[9] = 40_320,
+	[10] = 362_880,
+	[0.5] = math.sqrt(math.pi),
 	[1.5] = math.sqrt(math.pi) / 2,
-	[-0.5] = 2 * math.sqrt(math.pi),
+	[2.5] = 3 * math.sqrt(math.pi) / 4,
+	[-0.5] = -2 * math.sqrt(math.pi),
+	[-1.5] = 4 * math.sqrt(math.pi) / 3
 }
 
 --[[
@@ -81,7 +100,7 @@ local GammaCache = {
 
 	I have no idea what the hell is going on here. Taken from: http://rosettacode.org/wiki/Gamma_function#Lua
 
-	Точность примерно до 3-х знаков после запятой
+	Точность примерно до 3-х знаков после запятой, дальше шлак
 ]]
 local function gamma(x)
 	local gamma	=  0.577215664901
