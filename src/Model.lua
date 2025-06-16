@@ -16,22 +16,18 @@ local model = {}
 	Note: DO NOT FORGET DESTROY TWEEN WHERE YOU DESTROY MODEL!!!
 	--
 ]]
-function model.TweenModel(model: Model, tweenInfo: TweenInfo, cframe: CFrame): Tween
+function model.TweenModel (model: Model, tweenInfo: TweenInfo, cframe: CFrame): Tween
 	local v = Instance.new("CFrameValue")
-	
-	local t = TweenService:Create(
-		v,
-		tweenInfo,
-		{
-			CFrame = cframe
-		}
-	)
 
-	v.Changed:Connect(function(newCFrame: CFrame) 
+	local t = TweenService:Create(v, tweenInfo, {
+		CFrame = cframe,
+	})
+
+	v.Changed:Connect(function (newCFrame: CFrame)
 		model:PivotTo(newCFrame)
 	end)
 
-	t.Destroying:Connect(function() 
+	t.Destroying:Connect(function ()
 		v:Destroy()
 	end)
 

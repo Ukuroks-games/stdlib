@@ -3,19 +3,12 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local algorithm = require(ReplicatedStorage.Packages.algorithm)
 local testlib = require(ReplicatedStorage.DevPackages.testlib)
 
+testlib:AddTest(testlib.test.new(script.Name, function (): boolean
+	local t = {}
 
+	for i = 1, 128, 1 do
+		t[i] = math.random()
+	end
 
-testlib:AddTest(
-	testlib.test.new(
-		script.Name, 
-		function(): boolean 
-			local t = {}
-
-			for i = 1, 128, 1 do
-				t[i] = math.random()
-			end
-
-			return algorithm.max_key(t) == 128
-		end
-	)
-)
+	return algorithm.max_key(t) == 128
+end))

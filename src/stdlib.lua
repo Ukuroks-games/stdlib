@@ -8,5 +8,5 @@ return {
 	complex = require(script.Parent.complex),
 	math = require(script.Parent.math),
 	events = require(script.Parent.Events),
-	Part = require(script.Parent.Part)
+	Part = require(script.Parent.Part),
 }

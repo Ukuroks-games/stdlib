@@ -17,11 +17,14 @@ local Part = {}
 	anchor:Disconnect()
 	```
 ]]
-function Part.AnchorTo(AnchoredPart: { CFrame: CFrame }, AnchorPart: types.DefaultInstance & { CFrame: CFrame }, Offset: CFrame?): RBXScriptConnection
-	
-	local c = AnchorPart.Changed:Connect(function(prop: string) 
+function Part.AnchorTo (
+	AnchoredPart: { CFrame: CFrame },
+	AnchorPart: types.DefaultInstance & { CFrame: CFrame },
+	Offset: CFrame?
+): RBXScriptConnection
+	local c = AnchorPart.Changed:Connect(function (prop: string)
 		if prop == "CFrame" then
-			AnchoredPart.CFrame = AnchorPart.CFrame * (Offset or CFrame.new(0,0,0))
+			AnchoredPart.CFrame = AnchorPart.CFrame * (Offset or CFrame.new(0, 0, 0))
 		end
 	end)
 

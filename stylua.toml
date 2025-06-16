@@ -1,3 +1,4 @@
-syntax = "luau"
+syntax = "Luau"
 indent_type = "Tabs"
-
+space_after_function_names = "Definitions"
+collapse_simple_statement = "Never"
