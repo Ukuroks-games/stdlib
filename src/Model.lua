@@ -1,6 +1,6 @@
 local TweenService = game:GetService("TweenService")
 
-local model = {}
+local models = {}
 
 --[[
 	Tween model to CFrame
@@ -16,7 +16,7 @@ local model = {}
 	Note: DO NOT FORGET DESTROY TWEEN WHERE YOU DESTROY MODEL!!!
 	--
 ]]
-function model.TweenModel (model: Model, tweenInfo: TweenInfo, cframe: CFrame): Tween
+function models.TweenModel (model: Model, tweenInfo: TweenInfo, cframe: CFrame): Tween
 	local v = Instance.new("CFrameValue")
 
 	local t = TweenService:Create(v, tweenInfo, {
@@ -34,4 +34,4 @@ function model.TweenModel (model: Model, tweenInfo: TweenInfo, cframe: CFrame): 
 	return t
 end
 
-return model
+return models

@@ -70,7 +70,7 @@ function _math.factorialZ (n: number): number
 	assert(n >= 0, "Complex Infinity")
 
 	return algorithm.cached_calc(factoialCache, n, function (val)
-		return _math.factorialZ(n - 1) * n
+		return _math.factorialZ(val - 1) * val
 	end)
 end
 
@@ -100,17 +100,17 @@ local GammaCache = {
 
 	I have no idea what the hell is going on here. Taken from: http://rosettacode.org/wiki/Gamma_function#Lua
 
-	Точность примерно до 3-х знаков после запятой, дальше шлак
+	> Точность примерно до 3-х цифр после запятой, дальше шлак
 ]]
 local function gamma (x)
-	local gamma = 0.577215664901
+	local _gamma = 0.577215664901
 	local coeff = -0.65587807152056
 	local quad = -0.042002635033944
 	local qui = 0.16653861138228
 	local set = -0.042197734555571
 
 	local function recigamma (z)
-		return z + gamma * z ^ 2 + coeff * z ^ 3 + quad * z ^ 4 + qui * z ^ 5 + set * z ^ 6
+		return z + _gamma * z ^ 2 + coeff * z ^ 3 + quad * z ^ 4 + qui * z ^ 5 + set * z ^ 6
 	end
 
 	local function gammafunc (z)
@@ -135,10 +135,10 @@ end
 ]]
 function _math.gamma (n: number): number
 	return algorithm.cached_calc(GammaCache, n, function (val)
-		if n % 1 == 0 and n >= 1 then
-			return _math.factorialZ(n - 1)
+		if val % 1 == 0 and val >= 1 then
+			return _math.factorialZ(val - 1)
 		else
-			return gamma(n)
+			return gamma(val)
 		end
 	end)
 end
@@ -176,7 +176,7 @@ end
 ]]
 function _math.factorial (n: number): number
 	return algorithm.cached_calc(factoialCache, n, function (val)
-		if n % 1 == 0 then -- if n is integer
+		if val % 1 == 0 then -- if n is integer
 			return _math.factorialZ(val - 1) * val
 		else
 			return _math.gamma(val + 1)
@@ -201,9 +201,9 @@ end
 	+ delta > 0 ⇒ a < b
 	+ delta < 0 ⇒ a > b
 
-	> интересное наблюдение: количество верных цифр d результаьте равно кол-ву нулей в delta
+	> интересное наблюдение: количество верных цифр в результате равно кол-ву нулей в delta
 ]]
-function _math.integral (f: (x: number) -> number, a: number, b: number, delta: number?): number
+function _math._integral (f: (x: number) -> number, a: number, b: number, delta: number?): number
 	local _delta = delta or _math.defaultDelta
 
 	local n = 0
@@ -215,6 +215,18 @@ function _math.integral (f: (x: number) -> number, a: number, b: number, delta: 
 	return n
 end
 
+local integral_cache = {}
+
+--[[
+	Кешированный интеграл.
+
+	чтобы кеширование работало нужно указывать всего одну и ту же функцию(не копипаст)
+]]
+function _math.integral (f: (x: number) -> number, a: number, b: number, delta: number?): number
+	return algorithm.cached_calc(integral_cache, { f = f, a = a, b = b }, function (val)
+		return _math._integral(val.f, val.a, val.b, delta)
+	end)
+end
 --[[
 	Сравнить два дробных числа с определённой точностью
 

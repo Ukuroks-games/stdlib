@@ -1,3 +1,5 @@
+[![Lint](https://github.com/Ukuroks-games/stdlib/actions/workflows/Lint.yaml/badge.svg)](https://github.com/Ukuroks-games/stdlib/actions/workflows/Lint.yaml)
+
 # stdlib
 
 library that implements some algorithms

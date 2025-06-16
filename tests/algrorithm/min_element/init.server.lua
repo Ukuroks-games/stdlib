@@ -5,7 +5,6 @@ local algorithm = require(ReplicatedStorage.Packages.algorithm)
 
 testlib:AddTest(testlib.test.new(script.Name, function (): boolean
 	local t = {
-		[10] = 0,
 		1,
 		2,
 		3,
@@ -15,6 +14,7 @@ testlib:AddTest(testlib.test.new(script.Name, function (): boolean
 		7,
 		8,
 		9,
+		0,
 	}
 
 	local result = algorithm.min_element(t)

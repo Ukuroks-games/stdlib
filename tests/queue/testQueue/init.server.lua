@@ -8,7 +8,7 @@ testlib:AddTest(testlib.test.new("Queue", function (): boolean
 
 	local queue1 = queue.new(t)
 
-	for i, v in pairs(t) do
+	for _, v in pairs(t) do
 		if queue1:front() == v then
 			queue1:pop()
 		else

@@ -24,7 +24,6 @@ end))
 
 testlib:AddTest(testlib.test.new(script.Name .. 2, function (): boolean
 	local t = {
-		[10] = 0,
 		1,
 		2,
 		3,
@@ -34,6 +33,20 @@ testlib:AddTest(testlib.test.new(script.Name .. 2, function (): boolean
 		7,
 		8,
 		9,
+		0,
+	}
+
+	return not algorithm.is_sorted(t)
+end))
+
+testlib:AddTest(testlib.test.new(script.Name .. 3, function (): boolean
+	local t = {
+		434,
+		314224,
+		2222,
+		4,
+		21311,
+		1,
 	}
 
 	return not algorithm.is_sorted(t)

@@ -26,7 +26,11 @@
             "type": "shell",
             "label": "Lint",
             "detail": "Run selene",
-            "command": "selene DevPackages/ src/ tests/ && exit",
+            "command": "make lint && exit",
+            "group": {
+                "kind": "none"
+            },
+            "problemMatcher": []
         },
         {
             "type": "shell",
@@ -74,8 +78,8 @@
             "executable": "cmd",
             "args": [
                 "/k"
-            ]
-        }
+            ],
+        },
     },
     "version": "2.0.0"
 }
