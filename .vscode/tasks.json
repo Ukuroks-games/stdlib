@@ -24,6 +24,12 @@
         },
         {
             "type": "shell",
+            "label": "Lint",
+            "detail": "Run selene",
+            "command": "selene DevPackages/ src/ tests/ && exit",
+        },
+        {
+            "type": "shell",
             "label": "Install programms",
             "detail": "Install programms using aftman",
             "command": "aftman install && exit",
@@ -56,7 +62,7 @@
             "type": "shell",
             "label": "Publish",
             "detail": "Publish this as wally package",
-            "command": "wally publish && exit",
+            "command": "make publish && exit",
             "group": {
                 "kind": "none"
             },

@@ -10,7 +10,7 @@ local model = {}
 	--
 	just move model to cframe
 	```lua
-	local t = model.TweenModel(modle, tweenInfo, cframe):Play()
+	local t = model.TweenModel(model, tweenInfo, cframe):Play()
 	```
 
 	Note: DO NOT FORGET DESTROY TWEEN WHERE YOU DESTROY MODEL!!!

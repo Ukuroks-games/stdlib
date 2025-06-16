@@ -7,8 +7,6 @@ realm = "shared"
 license = "MIT"
 repository = "https://github/Ukuroks-games/stdlib"
 authors = ["Egor00f <velikiydolbayeb@gmail.com>"]
-include = ["src", "src/**", "wally.toml", "README.md", "init.lua"]
-exclude = ["*"]
 private = false
 
 
