@@ -8,7 +8,12 @@ local Events = {}
 
 	Возвращает BindableEvent и список RBXScriptConnection для возможности потом убрать нектоторые ивенты
 ]]
-function Events.AnyEvent <Index>(events: { [Index]: RBXScriptSignal }): (BindableEvent, { [Index]: RBXScriptConnection })
+function Events.AnyEvent <Index>(
+	events: { [Index]: RBXScriptSignal }
+): (
+	BindableEvent,
+	{ [Index]: RBXScriptConnection }
+)
 	local event: BindableEvent = Instance.new("BindableEvent")
 	local connections = {}
 
@@ -17,6 +22,14 @@ function Events.AnyEvent <Index>(events: { [Index]: RBXScriptSignal }): (Bindabl
 			event:Fire(...)
 		end)
 	end
+
+	event.Destroying:Connect(function (...: any)
+		for _, v in pairs(connections) do
+			if v then
+				v:Disconnect()
+			end
+		end
+	end)
 
 	return event, connections
 end

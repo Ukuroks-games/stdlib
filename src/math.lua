@@ -110,7 +110,12 @@ local function gamma (x)
 	local set = -0.042197734555571
 
 	local function recigamma (z)
-		return z + _gamma * z ^ 2 + coeff * z ^ 3 + quad * z ^ 4 + qui * z ^ 5 + set * z ^ 6
+		return z
+			+ _gamma * z ^ 2
+			+ coeff * z ^ 3
+			+ quad * z ^ 4
+			+ qui * z ^ 5
+			+ set * z ^ 6
 	end
 
 	local function gammafunc (z)
@@ -165,7 +170,8 @@ local BetaChache = {
 ]]
 function _math.beta (x: number, y: number): number
 	return algorithm.cached_calc(BetaChache, { x = x, y = y }, function (val)
-		return (_math.gamma(val.x) * _math.gamma(val.y)) / _math.gamma(val.x + val.y)
+		return (_math.gamma(val.x) * _math.gamma(val.y))
+			/ _math.gamma(val.x + val.y)
 	end)
 end
 
@@ -203,7 +209,12 @@ end
 
 	> интересное наблюдение: количество верных цифр в результате равно кол-ву нулей в delta
 ]]
-function _math._integral (f: (x: number) -> number, a: number, b: number, delta: number?): number
+function _math._integral (
+	f: (x: number) -> number,
+	a: number,
+	b: number,
+	delta: number?
+): number
 	local _delta = delta or _math.defaultDelta
 
 	local n = 0
@@ -222,11 +233,21 @@ local integral_cache = {}
 
 	чтобы кеширование работало нужно указывать всего одну и ту же функцию(не копипаст)
 ]]
-function _math.integral (f: (x: number) -> number, a: number, b: number, delta: number?): number
-	return algorithm.cached_calc(integral_cache, { f = f, a = a, b = b }, function (val)
-		return _math._integral(val.f, val.a, val.b, delta)
-	end)
+function _math.integral (
+	f: (x: number) -> number,
+	a: number,
+	b: number,
+	delta: number?
+): number
+	return algorithm.cached_calc(
+		integral_cache,
+		{ f = f, a = a, b = b },
+		function (val)
+			return _math._integral(val.f, val.a, val.b, delta)
+		end
+	)
 end
+
 --[[
 	Сравнить два дробных числа с определённой точностью
 

@@ -13,8 +13,7 @@ local models = {}
 	local t = model.TweenModel(model, tweenInfo, cframe):Play()
 	```
 
-	Note: DO NOT FORGET DESTROY TWEEN WHERE YOU DESTROY MODEL!!!
-	--
+	> DO NOT FORGET DESTROY TWEEN WHERE YOU DESTROY MODEL!!!
 ]]
 function models.TweenModel (model: Model, tweenInfo: TweenInfo, cframe: CFrame): Tween
 	local v = Instance.new("CFrameValue")

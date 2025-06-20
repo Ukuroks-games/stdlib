@@ -72,14 +72,10 @@ end
 	by default is unlocked
 ]]
 function mutex.new (lock: boolean?): Mutex
-	return {
+	return setmetatable({
 		locked = lock or false,
 		connect = Instance.new("BindableEvent"),
-		lock = mutex.lock,
-		unlock = mutex.unlock,
-		wait = mutex.wait,
-		Destroy = mutex.Destroy,
-	}
+	}, { __index = mutex })
 end
 
 return mutex

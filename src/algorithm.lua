@@ -143,7 +143,12 @@ end
 
 	`init`	- 
 ]]
-function algorithm.accumulate (Table: { number }, startIndex: number?, endIndex: number?, init: number?): number
+function algorithm.accumulate (
+	Table: { number },
+	startIndex: number?,
+	endIndex: number?,
+	init: number?
+): number
 	local sum = init or 0
 
 	algorithm.callForAll(Table, startIndex, endIndex, function (i: number)
@@ -166,7 +171,12 @@ end
 
 	`endIndex`	- 
 ]]
-function algorithm.find <Index, T>(Table: { [Index]: T }, value: T, startFind: Index?, endFind: Index?): Index?
+function algorithm.find <Index, T>(
+	Table: { [Index]: T },
+	value: T,
+	startFind: Index?,
+	endFind: Index?
+): Index?
 	if endFind then
 		for i = startFind or 1, endFind do
 			if Table[i] == value then
@@ -250,7 +260,11 @@ end
 --[[
 	Функция сравнения
 ]]
-local function defaultSearchCompare <T>(Table: { [number]: T }, i: number, range: { [number]: T }): boolean
+local function defaultSearchCompare <T>(
+	Table: { [number]: T },
+	i: number,
+	range: { [number]: T }
+): boolean
 	for j = 1, #range do
 		if Table[i + j] ~= range[j] then
 			return false
@@ -277,7 +291,10 @@ function algorithm.search <T>(
 	range: { [number]: T },
 	startIndex: number?,
 	endIndex: number?,
-	compare: ((i: number, range: { [number]: T }) -> boolean)?
+	compare: ((
+		i: number,
+		range: { [number]: T }
+	) -> boolean)?
 ): number?
 	local cmp = compare or defaultSearchCompare
 
@@ -298,7 +315,10 @@ function algorithm.search_n <T>(
 	range: { T },
 	start: number?,
 	endFind: number?,
-	compare: ((i: number, range: { [number]: T }) -> boolean)?
+	compare: ((
+		i: number,
+		range: { [number]: T }
+	) -> boolean)?
 ): number
 	local counter = 0
 
@@ -320,7 +340,11 @@ end
 
 	`Table` - Таблица, которую нужно отсортировать
 ]]
-function algorithm.sort (Table: { [any]: any }, startIndex: number?, endIndex: number?)
+function algorithm.sort (
+	Table: { [any]: any },
+	startIndex: number?,
+	endIndex: number?
+)
 	if startIndex or endIndex then
 		while not algorithm.is_sorted(Table, startIndex, endIndex) do
 			algorithm.callForAll(Table, startIndex, endIndex - 1, function (i)
@@ -343,7 +367,12 @@ end
 
 	`callback` - функция
 ]]
-function algorithm.sort_if <T>(Table: { [any]: T }, callback: (T, T) -> boolean, startIndex: number?, endIndex: number?)
+function algorithm.sort_if <T>(
+	Table: { [any]: T },
+	callback: (T, T) -> boolean,
+	startIndex: number?,
+	endIndex: number?
+)
 	if startIndex or endIndex then
 		while not algorithm.is_sorted(Table, startIndex, endIndex) do
 			algorithm.callForAll(Table, startIndex, endIndex - 1, function (i)
@@ -360,7 +389,12 @@ end
 --[[
 	Сортировка по свойтву
 ]]
-function algorithm.sort_by (Table: { { [any]: number } }, prop: string, startIndex: number?, endIndex: number?)
+function algorithm.sort_by (
+	Table: { { [any]: number } },
+	prop: string,
+	startIndex: number?,
+	endIndex: number?
+)
 	if startIndex or endIndex then
 		while not algorithm.is_sorted_by(Table, prop, startIndex, endIndex) do
 			algorithm.callForAll(Table, startIndex, endIndex - 1, function (i)
@@ -420,10 +454,19 @@ end
 
 	`Table` - таблица, которую нужно  проверить
 ]]
-function algorithm.is_sorted (Table: { [any]: number }, startIndex: number?, endIndex: number?): boolean
-	return algorithm.is_sorted_if(Table, function (last: number, current: number): boolean
-		return last > current
-	end, startIndex, endIndex)
+function algorithm.is_sorted (
+	Table: { [any]: number },
+	startIndex: number?,
+	endIndex: number?
+): boolean
+	return algorithm.is_sorted_if(
+		Table,
+		function (last: number, current: number): boolean
+			return last > current
+		end,
+		startIndex,
+		endIndex
+	)
 end
 
 --[[
@@ -439,9 +482,14 @@ function algorithm.is_sorted_by (
 	startIndex: number?,
 	endIndex: number?
 ): boolean
-	return algorithm.is_sorted_if(Table, function (a: { [any]: number }, b: { [any]: number }): boolean
-		return a[prop] > b[prop]
-	end, startIndex, endIndex)
+	return algorithm.is_sorted_if(
+		Table,
+		function (a: { [any]: number }, b: { [any]: number }): boolean
+			return a[prop] > b[prop]
+		end,
+		startIndex,
+		endIndex
+	)
 end
 
 --[[
@@ -457,7 +505,12 @@ end
 
 	`endIndex` - 
 ]]
-function algorithm.count <T, Index>(Table: { [Index]: T }, value: T, startIndex: number?, endIndex: number?): number
+function algorithm.count <T, Index>(
+	Table: { [Index]: T },
+	value: T,
+	startIndex: number?,
+	endIndex: number?
+): number
 	local counter = 0
 
 	algorithm.callForAll(Table, startIndex, endIndex, function (i)
@@ -508,7 +561,11 @@ end
 
 	Реверснутая таблица
 ]]
-function algorithm.reverse <Index, T>(Table: { [Index]: T }, startIndex: number?, endIndex: number?): { [Index]: T }
+function algorithm.reverse <Index, T>(
+	Table: { [Index]: T },
+	startIndex: number?,
+	endIndex: number?
+): { [Index]: T }
 	algorithm.callForAll(Table, startIndex, endIndex, function (i: Index)
 		Table[i], Table[#Table - i + 1] = Table[#Table - i + 1], Table[i]
 	end)
@@ -519,7 +576,11 @@ end
 --[[
 	# Удалить все дубликаты из таблицы
 ]]
-function algorithm.unique <Index, T>(Table: { [Index]: T }, startIndex: number?, endIndex: number?): { [Index]: T }
+function algorithm.unique <Index, T>(
+	Table: { [Index]: T },
+	startIndex: number?,
+	endIndex: number?
+): { [Index]: T }
 	local hash = {}
 	local res = {}
 
@@ -548,7 +609,11 @@ end
 
 	Сгенерированная таблица
 ]]
-function algorithm.generate <T>(generator: (i: number) -> T, first: number, last: number): { [number]: T }
+function algorithm.generate <T>(
+	generator: (i: number) -> T,
+	first: number,
+	last: number
+): { [number]: T }
 	local t = {}
 
 	for i = first, last, 1 do
@@ -561,7 +626,11 @@ end
 --[[
 	Получить индекс и значение наибольшего элемента в таблице
 ]]
-function algorithm.max_element <Index, T>(Table: { [Index]: T }, startIndex: number?, endIndex: number?): { Num: T, Index: Index }
+function algorithm.max_element <Index, T>(
+	Table: { [Index]: T },
+	startIndex: number?,
+	endIndex: number?
+): { Num: T, Index: Index }
 	local greatestNumber = -math.huge
 	local k
 
@@ -581,7 +650,11 @@ end
 --[[
 	Получить индекс и значение наменьшего элемента в таблице
 ]]
-function algorithm.min_element <Index, T>(Table: { [Index]: T }, startIndex: number?, endIndex: number?): { Num: T, Index: Index }
+function algorithm.min_element <Index, T>(
+	Table: { [Index]: T },
+	startIndex: number?,
+	endIndex: number?
+): { Num: T, Index: Index }
 	local minNumber = math.huge
 	local k
 
@@ -601,7 +674,11 @@ end
 --[[
 	Получить наменьший индекс в таблице
 ]]
-function algorithm.min_key <Index, T>(Table: { [Index]: T }, startIndex: number?, endIndex: number?): number
+function algorithm.min_key <Index, T>(
+	Table: { [Index]: T },
+	startIndex: number?,
+	endIndex: number?
+): number
 	local minNumber = math.huge
 
 	algorithm.callForAll(Table, startIndex, endIndex, function (i)
@@ -616,7 +693,11 @@ end
 --[[
 	Получить наибольший индекс в таблице
 ]]
-function algorithm.max_key <Index, T>(Table: { [Index]: T }, startIndex: number?, endIndex: number?): number
+function algorithm.max_key <Index, T>(
+	Table: { [Index]: T },
+	startIndex: number?,
+	endIndex: number?
+): number
 	local minNumber = -math.huge
 
 	algorithm.callForAll(Table, startIndex, endIndex, function (i)
@@ -668,7 +749,11 @@ end
 --[[
 	Копировать элементы таблицы
 ]]
-function algorithm.copy <T, Index>(Table: { [Index]: T }, startIndex: number?, endIndex: number?): { [Index]: T }
+function algorithm.copy <T, Index>(
+	Table: { [Index]: T },
+	startIndex: number?,
+	endIndex: number?
+): { [Index]: T }
 	if startIndex or endIndex then
 		-- copy
 		local t = {}
@@ -707,7 +792,12 @@ end
 --[[
 	Заполнить таблицу значением
 ]]
-function algorithm.fill <T>(Table: { [any]: T }, value: T, startIndex: number?, endIndex: number?)
+function algorithm.fill <T>(
+	Table: { [any]: T },
+	value: T,
+	startIndex: number?,
+	endIndex: number?
+)
 	algorithm.callForAll(Table, startIndex, endIndex, function (i)
 		Table[i] = value
 	end)
@@ -717,7 +807,11 @@ end
 	Удалить элементы в диапазоне
 	
 ]]
-function algorithm.remove (Table: { [any]: any }, startIndex: number?, endIndex: number?)
+function algorithm.remove (
+	Table: { [any]: any },
+	startIndex: number?,
+	endIndex: number?
+)
 	algorithm.callForAll(Table, startIndex, endIndex, function (i)
 		table.remove(Table, i)
 	end)
@@ -726,7 +820,12 @@ end
 --[[
 	Удалить элементы соответсвующие условию
 ]]
-function algorithm.remove_if <T>(Table: { T }, callback: (value: T) -> boolean, startIndex: number?, endIndex: number?)
+function algorithm.remove_if <T>(
+	Table: { T },
+	callback: (value: T) -> boolean,
+	startIndex: number?,
+	endIndex: number?
+)
 	algorithm.callForAll(Table, startIndex, endIndex, function (i)
 		if callback(Table[i]) then
 			table.remove(Table, i)
@@ -744,7 +843,11 @@ end
 --[[
 	Вычислить что-то и закешировать это. Если в кеше значения нет этого, то посчитатьт и записать в кеш
 ]]
-function algorithm.cached_calc <ARG, VALUE>(cacheTable: { [ARG]: VALUE }, val: ARG, calc: (val: ARG) -> VALUE): VALUE
+function algorithm.cached_calc <ARG, VALUE>(
+	cacheTable: { [ARG]: VALUE },
+	val: ARG,
+	calc: (val: ARG) -> VALUE
+): VALUE
 	if cacheTable[val] == nil then
 		cacheTable[val] = calc(val)
 	end

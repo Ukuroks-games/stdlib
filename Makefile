@@ -4,6 +4,7 @@ PACKAGE_NAME = $(LIBNAME).zip
 
 CP = cp -rf
 MV = mv -f
+RM = rm -rf
 
 ./build: 
 	mkdir build
@@ -17,10 +18,30 @@ package: configure
 	wally package --output $(PACKAGE_NAME) --project-path build
 
 publish: configure
-	wally publish
+	wally publish --project-path build
 
 lint:
-	selene DevPackages/ src/ tests/
+	selene src/ tests/
 
-clean: 
-	rm -rf build $(PACKAGE_NAME)
+./DevPackages: wally.toml
+	wally install
+
+$(LIBNAME).rbxm: configure
+	rojo build library.project.json --output $@
+
+tests: ./DevPackages
+	rojo build tests.project.json --output tests.rbxl
+
+tests.rbxl: tests
+
+sourcemap.json: ./DevPackages
+	rojo sourcemap tests.project.json --output $@
+
+delete-sourcemap: 
+	$(RM) sourcemap.json
+
+# Re gen sourcemap
+sourcemap: delete-sourcemap sourcemap.json
+
+clean:
+	$(RM) build $(PACKAGE_NAME) $(LIBNAME).rbxm

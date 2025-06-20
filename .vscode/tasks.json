@@ -4,7 +4,7 @@
             "type": "shell",
             "label": "Build",
             "detail": "Build tests place",
-            "command": "rojo build stdlib.project.json --output tests.rbxl && exit",
+            "command": "make tests && exit",
             "group": {
                 "kind": "build",
                 "isDefault": true
@@ -14,13 +14,10 @@
             "type": "shell",
             "label": "Generate sourcemap",
             "detail": "Generate sourcemap",
-            "command": "rojo sourcemap stdlib.project.json --output sourcemap.json && exit",
+            "command": "make sourcemap && exit",
             "group": {
                 "kind": "none"
-            },
-            "dependsOn": [
-                "Install depends"
-            ]
+            }
         },
         {
             "type": "shell",
@@ -46,7 +43,7 @@
             "type": "shell",
             "label": "Install depends",
             "detail": "Install all project depends",
-            "command": "wally install && exit",
+            "command": "make ./DevPackages && exit",
             "group": {
                 "kind": "none"
             },
