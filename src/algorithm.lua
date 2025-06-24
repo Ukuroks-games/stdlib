@@ -841,6 +841,15 @@ function algorithm.average (t: { number }): number
 end
 
 --[[
+	Set all table keys to value
+]]
+function algorithm.setAll (t: { [any]: any }, value: any)
+	for i, _ in pairs(t) do
+		t[i] = value
+	end
+end
+
+--[[
 	Вычислить что-то и закешировать это. Если в кеше значения нет этого, то посчитатьт и записать в кеш
 ]]
 function algorithm.cached_calc <ARG, VALUE>(

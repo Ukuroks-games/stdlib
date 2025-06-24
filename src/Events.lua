@@ -9,12 +9,13 @@ local Events = {}
 	Возвращает BindableEvent и список RBXScriptConnection для возможности потом убрать нектоторые ивенты
 ]]
 function Events.AnyEvent <Index>(
-	events: { [Index]: RBXScriptSignal }
+	events: { [Index]: RBXScriptSignal },
+	Event: BindableEvent?
 ): (
 	BindableEvent,
 	{ [Index]: RBXScriptConnection }
 )
-	local event: BindableEvent = Instance.new("BindableEvent")
+	local event: BindableEvent = Event or Instance.new("BindableEvent")
 	local connections = {}
 
 	for i, v in pairs(events) do

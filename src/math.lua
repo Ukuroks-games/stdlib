@@ -1,4 +1,5 @@
 local algorithm = require(script.Parent.algorithm)
+
 --[[
 	Расширенная математическая библиотека
 
@@ -88,11 +89,11 @@ local GammaCache = {
 	[8] = 5_040,
 	[9] = 40_320,
 	[10] = 362_880,
-	[0.5] = math.sqrt(math.pi),
-	[1.5] = math.sqrt(math.pi) / 2,
-	[2.5] = 3 * math.sqrt(math.pi) / 4,
-	[-0.5] = -2 * math.sqrt(math.pi),
-	[-1.5] = 4 * math.sqrt(math.pi) / 3,
+	[0.5] = math.sqrt(math.pi), -- √ℼ
+	[1.5] = math.sqrt(math.pi) / 2, -- √ℼ/2
+	[2.5] = 3 * math.sqrt(math.pi) / 4, -- (3/4)√ℼ
+	[-0.5] = -2 * math.sqrt(math.pi), -- -2√ℼ
+	[-1.5] = 4 * math.sqrt(math.pi) / 3, -- (4/3)√ℼ
 }
 
 --[[
@@ -166,7 +167,7 @@ local BetaChache = {
 }
 
 --[[
-		Beta function
+	Beta function
 ]]
 function _math.beta (x: number, y: number): number
 	return algorithm.cached_calc(BetaChache, { x = x, y = y }, function (val)

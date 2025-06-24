@@ -37,11 +37,33 @@ end
 --[[
 	Merge tables
 
+	`t1` - таблица в которую добавятся элементы других таблиц
+
 	`...` - tables that will be merged
 ]]
-function utility.merge <Index, Value>(...: { [Index]: Value }): { [Index]: Value }
-	-- result table
-	local merged = {}
+function utility.merge <Index1, Index2, Value1, Value2>(
+	t1: { [Index1]: Value1 },
+	...: { [Index2]: Value2 }
+): {
+	[Index1 | Index2]: Value1 | Value2,
+}
+	for _, t in pairs({ ... }) do
+		for i, v in pairs(t) do
+			t1[i] = v
+		end
+	end
+
+	return t1
+end
+
+--[[
+	Merge tables to new table
+
+	
+	`...` - tables that will be merged
+]]
+function utility.mergeToNew <Index, Value>(...: { [Index]: Value }): { [Index]: Value }
+	local merged = {} -- result table
 
 	for _, t in pairs({ ... }) do
 		for i, v in pairs(t) do
