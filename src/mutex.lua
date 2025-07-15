@@ -2,6 +2,7 @@
 	mutex class
 ]]
 local mutex = {}
+mutex.__index = mutex
 
 --[[
 	mutex struct
@@ -13,27 +14,7 @@ export type Mutex = {
 	locked: boolean,
 
 	connect: BindableEvent,
-
-	--[[
-		Lock mutex
-	]]
-	lock: (self: Mutex) -> nil,
-
-	--[[
-		Unlock mutex
-	]]
-	unlock: (self: Mutex) -> nil,
-
-	--[[
-
-	]]
-	wait: (self: Mutex) -> nil,
-
-	--[[
-		Destroy mutex
-	]]
-	Destroy: (self: Mutex) -> nil,
-}
+} & typeof(mutex)
 
 --[[
 	Lock mutex

@@ -260,4 +260,31 @@ function _math.floatcmp (a: number, b: number, precision: number?): boolean
 	return (a - b) < (precision or _math.defaultDelta)
 end
 
-return _math
+--[[
+	Среднее арифметическое значение в таблице
+]]
+function _math.averageT (t: { number }): number
+	return algorithm.accumulate(t) / #t
+end
+
+--[[
+	
+]]
+function _math.average(t: { number } | number, ...: number?): number
+	if typeof(t) == "table" then
+		return _math.averageT(t)
+	else
+		local tabl = {t, ...}
+		return _math.averageT(tabl)
+	end
+end
+
+--[[
+	Среднее квадротичное
+]]
+function _math.averageSquare(t:{ number }): number
+	return math.sqrt(algorithm.accumulateSq(t) / #t)
+end
+
+
+return setmetatable(_math, {__index = math})

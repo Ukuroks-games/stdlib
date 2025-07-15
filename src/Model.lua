@@ -8,25 +8,31 @@ local models = {}
 
 	Example:
 	--
-	just move model to cframe
-	```lua
-	local t = model.TweenModel(model, tweenInfo, cframe):Play()
+	just move model to CFrame
+	```luau
+	local t = model.TweenModel(model, tweenInfo, CFrame):Play()
 	```
-
-	> DO NOT FORGET DESTROY TWEEN WHERE YOU DESTROY MODEL!!!
 ]]
-function models.TweenModel (model: Model, tweenInfo: TweenInfo, cframe: CFrame): Tween
+function models.TweenModel (model: Model, tweenInfo: TweenInfo, cFrame: CFrame): Tween
 	local v = Instance.new("CFrameValue")
 
 	local t = TweenService:Create(v, tweenInfo, {
-		CFrame = cframe,
+		CFrame = cFrame,
 	})
 
 	v.Changed:Connect(function (newCFrame: CFrame)
 		model:PivotTo(newCFrame)
 	end)
 
+	local d = model.Destroying:Connect(function() 
+		t:Destroy()
+	end)
+
 	t.Destroying:Connect(function ()
+		if d then
+			d:Disconnect()
+		end
+
 		v:Destroy()
 	end)
 

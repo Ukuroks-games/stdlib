@@ -8,7 +8,10 @@
         "diffEditor.ignoreTrimWhitespace": false
     },
     "cSpell.enabled": true,
-    "cSpell.words": [],
+    "cSpell.words": [
+        "floatcmp",
+        "testlib"
+    ],
     "cSpell.ignorePaths": [
         ".vscode",
         "*.toml"

@@ -133,7 +133,7 @@ function algorithm.none_of <T>(
 end
 
 --[[
-	# суммирует или сворачивает ряд элементов 
+	# суммирует(сворачивает по умному) ряд элементов 
 
 	`Table`	- 
 
@@ -153,6 +153,80 @@ function algorithm.accumulate (
 
 	algorithm.callForAll(Table, startIndex, endIndex, function (i: number)
 		sum += Table[i]
+	end)
+
+	return sum
+end
+
+--[[
+	sum of squares
+]]
+function algorithm.accumulateSq (
+	Table: { number },
+	startIndex: number?,
+	endIndex: number?,
+	init: number?
+): number
+	local sum = init or 0
+
+	algorithm.callForAll(Table, startIndex, endIndex, function (i: number)
+		sum += math.pow(Table[i], 2)
+	end)
+
+	return sum
+end
+
+--[[
+	# суммирует(сворачивает по умному) ряд элементов по условию
+
+	`Table`	- 
+
+	`startIndex`	- 
+
+	`endIndex`	- 
+
+	`init`	- 
+]]
+function algorithm.accumulate_if (
+	Table: { {number} },
+	callback: (n: number) -> boolean,
+	startIndex: number?,
+	endIndex: number?,
+	init: number?
+): number
+	local sum = init or 0
+
+	algorithm.callForAll(Table, startIndex, endIndex, function (i: number)
+		if callback(Table[i]) then
+			sum += Table[i]
+		end
+	end)
+
+	return sum
+end
+
+--[[
+	# суммирует(сворачивает по умному) параметры ряда элементов
+
+	`Table`	- 
+
+	`startIndex`	- 
+
+	`endIndex`	- 
+
+	`init`	- 
+]]
+function algorithm.accumulate_by_prop (
+	Table: { {number} },
+	prop: string,
+	startIndex: number?,
+	endIndex: number?,
+	init: number?
+): number
+	local sum = init or 0
+
+	algorithm.callForAll(Table, startIndex, endIndex, function (i: number)
+		sum += Table[i][prop]
 	end)
 
 	return sum
@@ -831,13 +905,6 @@ function algorithm.remove_if <T>(
 			table.remove(Table, i)
 		end
 	end)
-end
-
---[[
-	Среднее значение в таблице
-]]
-function algorithm.average (t: { number }): number
-	return algorithm.accumulate(t) / #t
 end
 
 --[[

@@ -31,10 +31,10 @@ $(LIBNAME).rbxm:
 tests: tests.rbxl
 
 tests.rbxl: ./DevPackages
-	rojo build tests.project.json --output $@
+	rojo build $(LIBNAME).project.json --output $@
 
 sourcemap.json: ./DevPackages
-	rojo sourcemap tests.project.json --output $@
+	rojo sourcemap $(LIBNAME).project.json --output $@
 
 delete-sourcemap: 
 	$(RM) sourcemap.json

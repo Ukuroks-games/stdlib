@@ -8,7 +8,8 @@
             "group": {
                 "kind": "build",
                 "isDefault": true
-            }
+            },
+            "problemMatcher": []
         },
         {
             "type": "shell",
@@ -17,7 +18,8 @@
             "command": "make sourcemap && exit",
             "group": {
                 "kind": "none"
-            }
+            },
+            "problemMatcher": []
         },
         {
             "type": "shell",
@@ -70,13 +72,15 @@
             "problemMatcher": []
         },
     ],
-    "options": {
-        "shell": {
-            "executable": "cmd",
-            "args": [
-                "/k"
-            ],
-        },
+    "windows": {
+        "options": {
+            "shell": {
+                "executable": "cmd",
+                "args": [
+                    "/k"
+                ]
+            }
+        }
     },
     "version": "2.0.0"
 }
