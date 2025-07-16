@@ -13,14 +13,33 @@ SOURCES =	src/algorithm.luau	\
 			src/utility.luau	\
 			src/vector.luau	\
 			src/Part.luau	\
+			src/queue.luau	\
 			src/math.luau	\
 			src/types.luau	\
 			src/init.luau
 
+TESTS_POSTFIX = server.luau
+
+TESTS_SOURCES =	tests/test.$(TESTS_POSTFIX)	\
+				tests/algorithm/Find/init.$(TESTS_POSTFIX)	\
+				tests/algorithm/is_sorted/init.$(TESTS_POSTFIX)	\
+				tests/algorithm/max_element/init.$(TESTS_POSTFIX)	\
+				tests/algorithm/max_key/init.$(TESTS_POSTFIX)	\
+				tests/algorithm/min_element/init.$(TESTS_POSTFIX)	\
+				tests/algorithm/min_key/init.$(TESTS_POSTFIX)	\
+				tests/algorithm/testReverse/init.$(TESTS_POSTFIX)	\
+				tests/algorithm/testSort/init.$(TESTS_POSTFIX)	\
+				tests/algorithm/search.$(TESTS_POSTFIX)	\
+				tests/math/factorial.$(TESTS_POSTFIX)	\
+				tests/math/integral.$(TESTS_POSTFIX)	\
+				tests/mutex/mutexTest.$(TESTS_POSTFIX)	\
+				tests/queue/testQueue/init.$(TESTS_POSTFIX)	\
+				tests/utility/merge/init.$(TESTS_POSTFIX)	\
+
 ./build: 
 	mkdir build
 	
-configure: ./build wally.toml src/*
+configure: ./build wally.toml $(SOURCES)
 	$(CP) src/* build/
 	$(CP) wally.toml build/
 
@@ -39,7 +58,7 @@ lint:
 $(LIBNAME).rbxm:
 	rojo build library.project.json --output $@
 
-tests.rbxl: ./DevPackages $(LIBNAME).project.json $(SOURCES)
+tests.rbxl: ./DevPackages $(LIBNAME).project.json $(SOURCES) $(TESTS_SOURCES)
 	rojo build $(LIBNAME).project.json --output $@
 
 tests: clean-tests tests.rbxl
