@@ -6,6 +6,17 @@ CP = cp -rf
 MV = mv -f
 RM = rm -rf
 
+SOURCES =	src/algorithm.luau	\
+        	src/Events.luau	\
+			src/stack.luau	\
+			src/mutex.luau	\
+			src/utility.luau	\
+			src/vector.luau	\
+			src/Part.luau	\
+			src/math.luau	\
+			src/types.luau	\
+			src/init.luau
+
 ./build: 
 	mkdir build
 	
@@ -28,19 +39,29 @@ lint:
 $(LIBNAME).rbxm:
 	rojo build library.project.json --output $@
 
-tests: tests.rbxl
-
-tests.rbxl: ./DevPackages
+tests.rbxl: ./DevPackages $(LIBNAME).project.json $(SOURCES)
 	rojo build $(LIBNAME).project.json --output $@
 
-sourcemap.json: ./DevPackages
+tests: clean-tests tests.rbxl
+
+sourcemap.json: ./DevPackages $(LIBNAME).project.json
 	rojo sourcemap $(LIBNAME).project.json --output $@
 
-delete-sourcemap: 
+# Re gen sourcemap
+sourcemap: clean-sourcemap sourcemap.json
+
+
+clean-sourcemap: 
 	$(RM) sourcemap.json
 
-# Re gen sourcemap
-sourcemap: delete-sourcemap sourcemap.json
+clean-rbxm:
+	$(RM) $(RBXM_BUILD)
 
-clean:
-	$(RM) build $(PACKAGE_NAME) $(LIBNAME).rbxm
+clean-tests:
+	$(RM) tests.rbxl
+
+clean-build:
+	$(RM) $(BUILD_DIR)
+
+clean: clean-tests clean-build clean-rbxm
+	$(RM) $(PACKAGE_NAME) 
