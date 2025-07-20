@@ -1,7 +1,7 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local testlib = require(ReplicatedStorage.DevPackages.testlib)
-local mutex = require(ReplicatedStorage.Packages.mutex)
+local mutex = require(ReplicatedStorage.Packages.stdlib.mutex)
 
 testlib:AddTest(testlib.test.new("Mutex", function (): boolean
 	local m = mutex.new(true)

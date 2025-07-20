@@ -34,7 +34,7 @@ TESTS_SOURCES =	tests/test.$(TESTS_POSTFIX)	\
 				tests/math/integral.$(TESTS_POSTFIX)	\
 				tests/mutex/mutexTest.$(TESTS_POSTFIX)	\
 				tests/queue/testQueue/init.$(TESTS_POSTFIX)	\
-				tests/utility/merge/init.$(TESTS_POSTFIX)	\
+				tests/utility/merge/init.$(TESTS_POSTFIX)
 
 ./build: 
 	mkdir build

@@ -1,6 +1,11 @@
 {
-	"name": "stdlib",
+	"name": "Packages",
 	"tree": {
-		"$path": "src"
+		"Packages": {
+			"$path": "Packages",
+			"stdlib": {
+				"$path": "src"
+			}
+		}
 	}
 }

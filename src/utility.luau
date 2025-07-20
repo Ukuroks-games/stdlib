@@ -1,6 +1,6 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
-local switch = require(ReplicatedStorage.DevPackages.switch)
+local switch = require(ReplicatedStorage.Packages.switch)
 --[[
 	Utility library
 ]]

@@ -1,7 +1,7 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local testlib = require(ReplicatedStorage.DevPackages.testlib)
-local utility = require(ReplicatedStorage.Packages.utility)
+local utility = require(ReplicatedStorage.Packages.stdlib.utility)
 
 testlib:AddTest(testlib.test.new(script.Name .. " numbers", function (): boolean
 	local t = {n = 0}

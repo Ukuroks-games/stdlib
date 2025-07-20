@@ -1,6 +1,6 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
-local queue = require(ReplicatedStorage.Packages.queue)
+local queue = require(ReplicatedStorage.Packages.stdlib.queue)
 local testlib = require(ReplicatedStorage.DevPackages.testlib)
 
 testlib:AddTest(testlib.test.new("Queue", function (): boolean

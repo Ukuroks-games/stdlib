@@ -7,7 +7,7 @@ local load = function (chunk, _, __, context)
 	return loadstring(chunk)
 end
 
-local complex = require(ReplicatedStorage.Packages.complex)
+local complex = require(ReplicatedStorage.Packages.stdlib.complex)
 local testlib = require(ReplicatedStorage.DevPackages.testlib)
 
 local context = {

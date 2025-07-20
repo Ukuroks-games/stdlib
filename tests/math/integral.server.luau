@@ -1,7 +1,7 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local testlib = require(ReplicatedStorage.DevPackages.testlib)
-local math = require(ReplicatedStorage.Packages.math)
+local math = require(ReplicatedStorage.Packages.stdlib.math)
 
 testlib:AddTest(testlib.test.new(script.Name .. " 1", function (): boolean
 	return math.floatcmp(math.integral(function(x: number): number return 1 end, 0, math.pi), math.pi)

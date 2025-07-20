@@ -10,6 +10,7 @@
 wally.lock
 sourcemap.json
 
+Packages/
 DevPackages/
 
 build

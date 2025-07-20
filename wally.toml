@@ -12,6 +12,8 @@ private = false
 
 [dev-dependencies]
 testlib = "egor00f/testlib@>=1.0.1"
+
+[dependencies]
 switch = "egor00f/switch@>=0.1.1"
 
 [place]
