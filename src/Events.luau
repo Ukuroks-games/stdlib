@@ -33,7 +33,7 @@ function Events.AnyEvent <Index>(
 		end)
 	end
 
-	for _, event in pairs(events) do
+	for _, event in pairs(bEvents) do
 		event.Destroying:Connect(function (...: any)
 			for _, v in pairs(connections) do
 				if v then

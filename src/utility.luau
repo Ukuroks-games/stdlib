@@ -1,3 +1,6 @@
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local TweenService = game:GetService("TweenService")
+local switch = require(ReplicatedStorage.DevPackages.switch)
 --[[
 	Utility library
 ]]
@@ -92,6 +95,54 @@ function utility.compare <Index, Value>(
 	else
 		return false
 	end
+end
+
+local function TypenameToInstanceValueName(name: string): string
+	switch(name)
+	{
+		["boolean"] = function()
+			name = "bool"
+		end
+	}
+	
+	return name:gsub("^%l", string.upper)
+end
+
+--[[
+	Tween table param.
+
+	Working only for base types.
+
+	It will working with:
+	+ number
+	+ boolean
+	+ string (idk how)
+	+ Color3
+	+ Vector3
+	+ CFrame
+	+ BrickColor
+	+ Object
+	+ Ray
+]]
+function utility.TweenParam <Index, Val>(
+	Table: { [Index]: Val },
+	param: Index,
+	val: Val,
+	tweenInfo: TweenInfo
+): Tween
+	local value = Instance.new( TypenameToInstanceValueName(typeof(val)).. "Value")
+
+	local t = TweenService:Create(value, tweenInfo, { Value = val })
+
+	value.Changed:Connect(function(a0: string) 
+		Table[param] = value.Value
+	end)
+
+	t.Destroying:Connect(function(...: any) 
+		value:Destroy()
+	end)
+
+	return t
 end
 
 return utility

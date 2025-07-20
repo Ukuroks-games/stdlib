@@ -1,7 +1,7 @@
 [package]
 name = "egor00f/stdlib"
 description = "Library that implements some algorithms"
-version = "0.2.0"
+version = "0.1.17"
 registry = "https://github.com/UpliftGames/wally-index"
 realm = "shared"
 license = "MIT"
@@ -12,7 +12,7 @@ private = false
 
 [dev-dependencies]
 testlib = "egor00f/testlib@>=1.0.1"
-
+switch = "egor00f/switch@>=0.1.1"
 
 [place]
 shared-packages = "game.ReplicatedStorage.Packages"

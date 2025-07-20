@@ -10,6 +10,7 @@
     "cSpell.enabled": true,
     "cSpell.words": [
         "floatcmp",
+        "gsub",
         "rbxl",
         "rbxm",
         "rojo",
@@ -20,5 +21,6 @@
         "*.toml"
     ],
     "luau-lsp.sourcemap.rojoProjectFile": "stdlib.project.json",
-    "luau-lsp.platform.type": "roblox"
+    "luau-lsp.platform.type": "roblox",
+    "makefile.configureOnOpen": false
 }
