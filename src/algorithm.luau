@@ -1,4 +1,5 @@
 --!nocheck
+local utility = require(script.Parent.utility)
 
 --[[
 	# Алгоритмы
@@ -188,7 +189,7 @@ end
 	`init`	- 
 ]]
 function algorithm.accumulate_if (
-	Table: { {number} },
+	Table: { { number } },
 	callback: (n: number) -> boolean,
 	startIndex: number?,
 	endIndex: number?,
@@ -217,7 +218,7 @@ end
 	`init`	- 
 ]]
 function algorithm.accumulate_by_prop (
-	Table: { {number} },
+	Table: { { number } },
 	prop: string,
 	startIndex: number?,
 	endIndex: number?,
@@ -484,6 +485,8 @@ function algorithm.sort_by (
 	end
 end
 
+
+
 --[[
 	# Проверить, отсоритрованна ли таблица по условию
 
@@ -635,16 +638,35 @@ end
 
 	Реверснутая таблица
 ]]
-function algorithm.reverse <Index, T>(
-	Table: { [Index]: T },
+function algorithm.reverse <T>(
+	Table: { [number]: T },
 	startIndex: number?,
 	endIndex: number?
-): { [Index]: T }
-	algorithm.callForAll(Table, startIndex, endIndex, function (i: Index)
-		Table[i], Table[#Table - i + 1] = Table[#Table - i + 1], Table[i]
-	end)
+): { [number]: T }
 
-	return Table
+	local t
+
+	if startIndex or endIndex then
+		t = table.clone(Table)
+
+		for _, i in pairs(t) do
+			if (startIndex and i < startIndex) or (endIndex and i > endIndex) then
+				t[i] = nil
+			end
+		end
+	else 
+		t = Table
+	end
+
+	for i = startIndex or 1, math.floor((endIndex or #t)/2), 1 do
+		t[i], t[#Table - i + 1] = t[#Table - i + 1], t[i]
+	end
+
+	if startIndex or endIndex then
+		return utility.merge(Table, t)
+	else
+		return t
+	end
 end
 
 --[[

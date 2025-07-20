@@ -1,6 +1,7 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 local switch = require(ReplicatedStorage.Packages.switch)
+
 --[[
 	Utility library
 ]]
@@ -134,11 +135,11 @@ function utility.TweenParam <Index, Val>(
 
 	local t = TweenService:Create(value, tweenInfo, { Value = val })
 
-	value.Changed:Connect(function(a0: string) 
+	value.Changed:Connect(function(_: string) 
 		Table[param] = value.Value
 	end)
 
-	t.Destroying:Connect(function(...: any) 
+	t.Destroying:Connect(function(_: any) 
 		value:Destroy()
 	end)
 

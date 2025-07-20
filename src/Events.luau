@@ -34,7 +34,7 @@ function Events.AnyEvent <Index>(
 	end
 
 	for _, event in pairs(bEvents) do
-		event.Destroying:Connect(function (...: any)
+		event.Destroying:Connect(function (_: any)
 			for _, v in pairs(connections) do
 				if v then
 					v:Disconnect()
