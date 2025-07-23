@@ -1,6 +1,5 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
-local switch = require(ReplicatedStorage.Packages.switch)
+local switch = require(script.Parent.Parent.switch)
 
 --[[
 	Utility library
@@ -144,6 +143,22 @@ function utility.TweenParam <Index, Val>(
 	end)
 
 	return t
+end
+
+function utility.CreateOrFindInstance(Name, typeName, Parent: Instance): Instance
+	local a = Parent:FindFirstChild(Name)
+	if a then
+		if typeof(a) ~= typeName then
+			warn("find " .. typeof(a) .. " , not " .. typeName)
+		end
+		
+		return a
+	else
+		local b = Instance.new(typeName)
+		b.Parent = Parent
+		b.Name = Name
+		return b
+	end
 end
 
 return utility
