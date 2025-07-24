@@ -1,12 +1,15 @@
 local stack = {}
 stack.__index = stack
 
-export type Stack = typeof(setmetatable({} :: { data: {} }, stack))
+export type Stack = typeof(setmetatable(
+	{} :: { data: { [number]: any } },
+	stack
+))
 
 --[[
 	# Создать стэк
 ]]
-function stack.new (init: {}?): Stack
+function stack.new (init: { [number]: any }?): Stack
 	return setmetatable({ data = init or {} }, stack)
 end
 

@@ -11,7 +11,7 @@ local Part = {}
 
 	Example:
 	--
-	```lua
+	```luau
 	local anchor = Part.AnchorTo(AnchoredPart, AnchorPart)
 	-- somethings
 	anchor:Disconnect()

@@ -2,24 +2,61 @@
     "tasks": [
         {
             "type": "shell",
-            "label": "Build",
+            "label": "Install programs",
+            "detail": "Install programms using aftman",
+            "command": "aftman install && exit",
+            "group": {
+                "kind": "none"
+            },
+            "problemMatcher": [],
+        },
+        {
+            "type": "shell",
+            "label": "Load depends",
+            "command": "make Packages && exit",
+            "group": {
+                "kind": "none"
+            },
+            "detail": "Install all project depends",
+            "problemMatcher": [],
+        },
+        {
+            "type": "shell",
+            "label": "Publish",
+            "detail": "Putblish this library as wally package",
+            "command": "make publish && exit",
+            "group": {
+                "kind": "none"
+            },
+        },
+        {
+            "type": "shell",
+            "label": "Build tests",
             "detail": "Build tests place",
             "command": "make tests && exit",
             "group": {
                 "kind": "build",
                 "isDefault": true
-            },
-            "problemMatcher": []
+            }
+        },
+        {
+            "type": "shell",
+            "label": "Build rbxm",
+            "detail": "Build rbxm library",
+            "command": "make rbxm && exit",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
         },
         {
             "type": "shell",
             "label": "Generate sourcemap",
-            "detail": "Generate sourcemap",
+            "detail": "Generate sourcemap for this library",
             "command": "make sourcemap && exit",
             "group": {
                 "kind": "none"
-            },
-            "problemMatcher": []
+            }
         },
         {
             "type": "shell",
@@ -27,49 +64,8 @@
             "detail": "Run selene",
             "command": "make lint && exit",
             "group": {
-                "kind": "none"
-            },
-            "problemMatcher": []
-        },
-        {
-            "type": "shell",
-            "label": "Install programms",
-            "detail": "Install programms using aftman",
-            "command": "aftman install && exit",
-            "group": {
-                "kind": "none"
-            },
-            "problemMatcher": []
-        },
-        {
-            "type": "shell",
-            "label": "Install depends",
-            "detail": "Install all project depends",
-            "command": "make ./DevPackages && exit",
-            "group": {
-                "kind": "none"
-            },
-            "problemMatcher": [],
-        },
-        {
-            "type": "shell",
-            "label": "Update depends",
-            "detail": "Update all project depends",
-            "command": "wally update && exit",
-            "group": {
-                "kind": "none"
-            },
-            "problemMatcher": [],
-        },
-        {
-            "type": "shell",
-            "label": "Publish",
-            "detail": "Publish this as wally package",
-            "command": "make publish && exit",
-            "group": {
-                "kind": "none"
-            },
-            "problemMatcher": []
+                "kind": "none",
+            }
         },
     ],
     "windows": {

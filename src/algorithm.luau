@@ -485,8 +485,6 @@ function algorithm.sort_by (
 	end
 end
 
-
-
 --[[
 	# Проверить, отсоритрованна ли таблица по условию
 
@@ -643,22 +641,23 @@ function algorithm.reverse <T>(
 	startIndex: number?,
 	endIndex: number?
 ): { [number]: T }
-
 	local t
 
 	if startIndex or endIndex then
 		t = table.clone(Table)
 
 		for _, i in pairs(t) do
-			if (startIndex and i < startIndex) or (endIndex and i > endIndex) then
+			if
+				(startIndex and i < startIndex) or (endIndex and i > endIndex)
+			then
 				t[i] = nil
 			end
 		end
-	else 
+	else
 		t = Table
 	end
 
-	for i = startIndex or 1, math.floor((endIndex or #t)/2), 1 do
+	for i = startIndex or 1, math.floor((endIndex or #t) / 2), 1 do
 		t[i], t[#Table - i + 1] = t[#Table - i + 1], t[i]
 	end
 
@@ -839,6 +838,7 @@ function algorithm.copy_by_props <Index>(
 			t[i][prop] = Table[i][prop]
 		end
 	end)
+
 	return t
 end
 

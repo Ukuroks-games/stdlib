@@ -2,6 +2,8 @@ LIBNAME = stdlib
 
 PACKAGE_NAME = $(LIBNAME).zip
 
+RBXM_BUILD = $(LIBNAME).rbxm
+
 CP = cp -rf
 MV = mv -f
 RM = rm -rf
@@ -52,18 +54,23 @@ publish: configure
 lint:
 	selene src/ tests/
 
+./Packages: wally.toml
+	wally install
+
 ./DevPackages: wally.toml
 	wally install
 
-$(LIBNAME).rbxm:
+$(RBXM_BUILD): library.project.json $(SOURCES)
 	rojo build library.project.json --output $@
 
-tests.rbxl: ./DevPackages $(LIBNAME).project.json $(SOURCES) $(TESTS_SOURCES)
+rbxm: clean-rbxm $(RBXM_BUILD)
+
+tests.rbxl: ./Packages ./DevPackages $(LIBNAME).project.json $(SOURCES) $(TESTS_SOURCES)
 	rojo build $(LIBNAME).project.json --output $@
 
 tests: clean-tests tests.rbxl
 
-sourcemap.json: ./DevPackages $(LIBNAME).project.json
+sourcemap.json: ./Packages ./DevPackages $(LIBNAME).project.json
 	rojo sourcemap $(LIBNAME).project.json --output $@
 
 # Re gen sourcemap
