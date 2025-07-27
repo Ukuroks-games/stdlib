@@ -1,8 +1,10 @@
 local mutex = require(script.mutex)
 local queue = require(script.queue)
+local queueMutex = require(script.queueMutex)
 local stack = require(script.stack)
 
 export type Mutex = mutex.Mutex
+export type QueueMutex = queueMutex.QueueMutex
 export type Queue = queue.queue
 export type Stack = stack.Stack
 
@@ -17,4 +19,5 @@ return {
 	math = require(script.math),
 	events = require(script.Events),
 	Part = require(script.Part),
+	queueMutex = queueMutex
 }
