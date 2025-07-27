@@ -1,22 +1,19 @@
---!nocheck
-
 --[[
-	mutex class
+	simple mutex class
 ]]
 local mutex = {}
-mutex.__index = mutex
 
 --[[
 	mutex struct
 ]]
-export type Mutex = {
+export type Mutex = typeof(setmetatable({} :: {
 	--[[
 		Now is locked
 	]]
 	locked: boolean,
 
 	connect: BindableEvent,
-} & typeof(mutex)
+}, {__index = mutex}))
 
 --[[
 	Lock mutex
