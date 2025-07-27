@@ -14,6 +14,7 @@
         "rbxl",
         "rbxm",
         "rojo",
+        "stdlib",
         "testlib"
     ],
     "cSpell.ignorePaths": [

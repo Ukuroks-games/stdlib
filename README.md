@@ -10,6 +10,7 @@ library that implements some algorithms
 + stack
 + queue
 + mutex
++ queueMutex
 
 ## Run test
 
