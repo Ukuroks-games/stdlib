@@ -953,4 +953,17 @@ function algorithm.cached_calc <ARG, VALUE>(
 	return cacheTable[val]
 end
 
+--[[
+	Get List of indexs
+]]
+function algorithm.GetIndexs<Index>(Table: { [Index]: any }): {Index}
+	local t = {}
+
+	for i, _ in pairs(Table) do
+		table.insert(t, i)
+	end
+
+	return t
+end
+
 return algorithm
