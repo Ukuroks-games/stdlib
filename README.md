@@ -6,11 +6,12 @@ library that implements some algorithms
 
 ## Classes
 
-+ vector (array)
-+ stack
-+ queue
-+ mutex
-+ queueMutex
++ `Vector` (array)
++ `Stack`
++ `Queue`
++ `Mutex`
++ `QueueMutex`
++ `ThreadSaveValue`
 
 ## Run test
 

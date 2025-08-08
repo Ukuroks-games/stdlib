@@ -1,3 +1,4 @@
+local ThreadSaveValue = require("@self/ThreadSaveValue")
 local mutex = require(script.mutex)
 local queue = require(script.queue)
 local queueMutex = require(script.queueMutex)
@@ -7,6 +8,7 @@ export type Mutex = mutex.Mutex
 export type QueueMutex = queueMutex.QueueMutex
 export type Queue = queue.queue
 export type Stack = stack.Stack
+export type threadSaveValue<T> = ThreadSaveValue.ThreadSaveValue<T>
 
 return {
 	vector = require(script.vector),
@@ -19,5 +21,6 @@ return {
 	math = require(script.math),
 	events = require(script.Events),
 	Part = require(script.Part),
-	queueMutex = queueMutex
+	queueMutex = queueMutex,
+	ThreadSaveValue = ThreadSaveValue,
 }
