@@ -27,7 +27,7 @@ _math.lg = math.log10
 
 	чтоб не напряготь комп и безтого медленным lua кодом
 ]]
-local factoialCache = {
+local factorialCache = {
 	[0.5] = math.sqrt(math.pi) / 2,
 	[1.5] = 3 * math.sqrt(math.pi) / 4,
 	[2.5] = 15 * math.sqrt(math.pi) / 8,
@@ -70,7 +70,7 @@ _math.defaultDelta = 1e-5
 function _math.factorialZ (n: number): number
 	assert(n >= 0, "Complex Infinity")
 
-	return algorithm.cached_calc(factoialCache, n, function (val)
+	return algorithm.cached_calc(factorialCache, n, function (val)
 		return _math.factorialZ(val - 1) * val
 	end)
 end
@@ -110,7 +110,7 @@ local function gamma (x)
 	local qui = 0.16653861138228
 	local set = -0.042197734555571
 
-	local function recigamma (z)
+	local function reciGamma (z)
 		return z
 			+ _gamma * z ^ 2
 			+ coeff * z ^ 3
@@ -119,17 +119,17 @@ local function gamma (x)
 			+ set * z ^ 6
 	end
 
-	local function gammafunc (z)
+	local function gammaFunc (z)
 		if z == 1 then
 			return 1
 		elseif math.abs(z) <= 0.5 then
-			return 1 / recigamma(z)
+			return 1 / reciGamma(z)
 		else
-			return (z - 1) * gammafunc(z - 1)
+			return (z - 1) * gammaFunc(z - 1)
 		end
 	end
 
-	return gammafunc(x)
+	return gammaFunc(x)
 end
 
 --[[
@@ -182,7 +182,7 @@ end
 	return n!
 ]]
 function _math.factorial (n: number): number
-	return algorithm.cached_calc(factoialCache, n, function (val)
+	return algorithm.cached_calc(factorialCache, n, function (val)
 		if val % 1 == 0 then -- if n is integer
 			return _math.factorialZ(val - 1) * val
 		else
@@ -270,21 +270,27 @@ end
 --[[
 	
 ]]
-function _math.average(t: { number } | number, ...: number?): number
+function _math.average (t: { number } | number, ...: number?): number
 	if typeof(t) == "table" then
 		return _math.averageT(t)
 	else
-		local tabl = {t, ...}
+		local tabl = { t, ... }
 		return _math.averageT(tabl)
 	end
 end
 
 --[[
-	Среднее квадротичное
+	Среднее квадратичное
 ]]
-function _math.averageSquare(t:{ number }): number
+function _math.averageSquare (t: { number }): number
 	return math.sqrt(algorithm.accumulateSq(t) / #t)
 end
 
+--[[
 
-return setmetatable(_math, {__index = math})
+]]
+function _math.map (n: number, from: NumberRange, to: NumberRange): number
+	return (n - from.Min) / (from.Max - from.Min) * (to.Max - to.Min) + to.Min
+end
+
+return setmetatable(_math, { __index = math })
