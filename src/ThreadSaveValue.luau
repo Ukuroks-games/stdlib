@@ -32,6 +32,14 @@ function threadSaveValue.GetValue<T>(self: ThreadSaveValue<T>): T
 end
 
 --[[
+
+]]
+function threadSaveValue.GetValueSafe <T>(self: ThreadSaveValue<T>): T
+	self.Mutex:wait()
+	return self.Value
+end
+
+--[[
 	constructor
 ]]
 function threadSaveValue.new <T>(value: T): ThreadSaveValue<T>
