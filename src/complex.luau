@@ -48,10 +48,15 @@ end
 
 function complex:__div (denominator)
 	-- https://www.mesacc.edu/~scotz47781/mat120/notes/complex/dividing/dividing_complex.html
-	local conjugate = type(denominator) == "number" and complex(denominator) or denominator:conjugate()
-	local new_numerator, new_denominator = self * conjugate, denominator * conjugate
+	local conjugate = type(denominator) == "number" and complex(denominator)
+		or denominator:conjugate()
+	local new_numerator, new_denominator =
+		self * conjugate, denominator * conjugate
 	-- new_denominator is real.
-	return complex(new_numerator.r / new_denominator.r, new_numerator.i / new_denominator.r)
+	return complex(
+		new_numerator.r / new_denominator.r,
+		new_numerator.i / new_denominator.r
+	)
 end
 
 function complex:abs2 ()
@@ -81,7 +86,8 @@ end
 function complex:exp ()
 	local abs = math.exp(self.r)
 	-- Special treatment for real numbers to avoid fantom imaginary parts:
-	return self.i == 0 and abs or complex(abs * math.cos(self.i), abs * math.sin(self.i))
+	return self.i == 0 and abs
+		or complex(abs * math.cos(self.i), abs * math.sin(self.i))
 end
 
 function complex:__pow (power)
@@ -133,7 +139,11 @@ function complex:tostring (i, prefix, parentheses)
 	local i = self.i
 
 	local r_str = (r ~= 0 or i == 0) and r or ""
-	local i_str = i ~= 0 and (prefix and im .. math.abs(i) or (math.abs(i) == 1 and "" or math.abs(i)) .. im) or ""
+	local i_str = i ~= 0
+			and (prefix and im .. math.abs(i) or (math.abs(i) == 1 and "" or math.abs(
+				i
+			)) .. im)
+		or ""
 	local space = (r ~= 0 and i ~= 0) and " " or ""
 	local sign = r ~= 0 and i > 0 and "+" or i < 0 and "-" or ""
 
