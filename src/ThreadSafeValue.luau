@@ -1,4 +1,4 @@
-local mutex = require("./mutex")
+local mutex = require(script.Parent.mutex)
 
 local threadSafeValue = {}
 
