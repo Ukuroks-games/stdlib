@@ -10,10 +10,13 @@
     "cSpell.enabled": true,
     "cSpell.words": [
         "floatcmp",
+        "getmetatable",
         "gsub",
+        "metatable",
         "rbxl",
         "rbxm",
         "rojo",
+        "setmetatable",
         "stdlib",
         "testlib"
     ],
@@ -24,5 +27,6 @@
     "luau-lsp.sourcemap.rojoProjectFile": "stdlib.project.json",
     "luau-lsp.platform.type": "roblox",
     "luau-lsp.sourcemap.generatorCommand": "make sourcemap",
-    "makefile.configureOnOpen": false
+    "makefile.configureOnOpen": false,
+    "luau-lsp.sourcemap.useVSCodeWatcher": true
 }

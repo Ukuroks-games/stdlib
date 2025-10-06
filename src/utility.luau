@@ -1,5 +1,6 @@
 local TweenService = game:GetService("TweenService")
 local switch = require(script.Parent.Parent.switch)
+local types = require(script.Parent.types)
 
 --[[
 	Utility library
@@ -97,6 +98,21 @@ function utility.compare <Index, Value>(
 	end
 end
 
+--[[
+	Full clone table with sub tables and them metatables
+]]
+function utility.clone(t: {}): {}
+	local clone = table.clone(t) 
+
+	for key, value in pairs(t) do
+		if type(value) == "table" then
+			clone[key] = utility.clone(value)
+		end
+	end
+
+	return setmetatable(clone, getmetatable(t))
+end
+
 local function TypenameToInstanceValueName(name: string): string
 	switch(name)
 	{
@@ -114,15 +130,15 @@ end
 	Working only for base types.
 
 	It will working with:
-	+ number
-	+ boolean
-	+ string (idk how)
-	+ Color3
-	+ Vector3
-	+ CFrame
-	+ BrickColor
-	+ Object
-	+ Ray
+	+ `number`
+	+ `boolean`
+	+ `string` (idk how)
+	+ `Color3`
+	+ `Vector3`
+	+ `CFrame`
+	+ `BrickColor`
+	+ `Object`
+	+ `Ray`
 ]]
 function utility.TweenParam <Index, Val>(
 	Table: { [Index]: Val },
