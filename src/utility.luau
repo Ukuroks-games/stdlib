@@ -98,15 +98,25 @@ function utility.compare <Index, Value>(
 	end
 end
 
+function utility.ForwardedGet<T>(i: Instance, key: string): T
+	local s, _ = pcall(function(...)  
+		return i[key] :: T
+	end)
+
+	return s
+end
+
 --[[
-	Full clone table with sub tables and them metatables
+	Full clone table with sub tables, them metatables and `Instances`
 ]]
-function utility.clone(t: {}): {}
+function utility.clone<T>(t: T): T
 	local clone = table.clone(t) 
 
 	for key, value in pairs(t) do
 		if type(value) == "table" then
 			clone[key] = utility.clone(value)
+		elseif utility.ForwardedGet(value, "ClassName") then
+			clone[key] = value:Clone()
 		end
 	end
 
