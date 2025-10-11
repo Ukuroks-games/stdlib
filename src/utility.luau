@@ -98,12 +98,12 @@ function utility.compare <Index, Value>(
 	end
 end
 
-function utility.ForwardedGet<T>(i: Instance, key: string): T
-	local s, _ = pcall(function(...)  
+function utility.ForwardedGet<T>(i: any, key: string): boolean
+	local _, e pcall(function(...)  
 		return i[key] :: T
 	end)
-
-	return s
+	
+	return e
 end
 
 --[[
@@ -115,7 +115,9 @@ function utility.clone<T>(t: T): T
 	for key, value in pairs(t) do
 		if type(value) == "table" then
 			clone[key] = utility.clone(value)
-		elseif utility.ForwardedGet(value, "ClassName") then
+		elseif utility.ForwardedGet(value, "Clone")  then
+			print(utility.ForwardedGet(value, "Clone"))
+			print(value)
 			clone[key] = value:Clone()
 		end
 	end
