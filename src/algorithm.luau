@@ -825,12 +825,12 @@ end
 --[[
 	# Копирует таблицу по с списку свойств
 ]]
-function algorithm.copy_by_props <Index>(
-	Table: { [Index]: { any } },
+function algorithm.copy_by_props <Index, V>(
+	Table: { [Index]: { V } },
 	props: { string },
 	startIndex: number?,
 	endIndex: number?
-): { [Index]: {} }
+): { [Index]: { V } }
 	local t = {}
 
 	algorithm.callForAll(Table, startIndex, endIndex, function (i)
@@ -956,11 +956,26 @@ end
 --[[
 	Get List of indexs
 ]]
-function algorithm.GetIndexs<Index>(Table: { [Index]: any }): {Index}
+function algorithm.GetIndexs <Index>(Table: { [Index]: any }): { Index }
 	local t = {}
 
 	for i, _ in pairs(Table) do
 		table.insert(t, i)
+	end
+
+	return t
+end
+
+function algorithm.get_keys_values <INDEX, Value>(
+	Table: { [Index]: Value },
+	list: { Index }
+): { Value }
+	local t = {}
+
+	for i, v in pairs(Table) do
+		if table.find(list, i) then
+			table.insert(t, v)
+		end
 	end
 
 	return t
