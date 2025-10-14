@@ -98,26 +98,28 @@ function utility.compare <Index, Value>(
 	end
 end
 
-function utility.ForwardedGet<T>(i: any, key: string): boolean
-	local _, e pcall(function(...)  
+function utility.ForwardedGet <T>(i: any, key: string): T?
+	local s, e = pcall(function (...)
 		return i[key] :: T
 	end)
-	
-	return e
+
+	if s then
+		return e
+	else
+		return nil
+	end
 end
 
 --[[
 	Full clone table with sub tables, them metatables and `Instances`
 ]]
-function utility.clone<T>(t: T): T
-	local clone = table.clone(t) 
+function utility.clone <T>(t: T): T
+	local clone = table.clone(t)
 
 	for key, value in pairs(t) do
 		if type(value) == "table" then
 			clone[key] = utility.clone(value)
-		elseif utility.ForwardedGet(value, "Clone")  then
-			print(utility.ForwardedGet(value, "Clone"))
-			print(value)
+		elseif utility.ForwardedGet(value, "Clone") ~= nil then
 			clone[key] = value:Clone()
 		end
 	end
@@ -125,14 +127,13 @@ function utility.clone<T>(t: T): T
 	return setmetatable(clone, getmetatable(t))
 end
 
-local function TypenameToInstanceValueName(name: string): string
-	switch(name)
-	{
-		["boolean"] = function()
+local function TypenameToInstanceValueName (name: string): string
+	switch(name)({
+		["boolean"] = function ()
 			name = "bool"
-		end
-	}
-	
+		end,
+	})
+
 	return name:gsub("^%l", string.upper)
 end
 
@@ -158,28 +159,33 @@ function utility.TweenParam <Index, Val>(
 	val: Val,
 	tweenInfo: TweenInfo
 ): Tween
-	local value = Instance.new( TypenameToInstanceValueName(typeof(val)).. "Value")
+	local value =
+		Instance.new(TypenameToInstanceValueName(typeof(val)) .. "Value")
 
 	local t = TweenService:Create(value, tweenInfo, { Value = val })
 
-	value.Changed:Connect(function(_: string) 
+	value.Changed:Connect(function (_: string)
 		Table[param] = value.Value
 	end)
 
-	t.Destroying:Connect(function(_: any) 
+	t.Destroying:Connect(function (_: any)
 		value:Destroy()
 	end)
 
 	return t
 end
 
-function utility.CreateOrFindInstance(Name, typeName, Parent: Instance): Instance
+function utility.CreateOrFindInstance (
+	Name,
+	typeName,
+	Parent: Instance
+): Instance
 	local a = Parent:FindFirstChild(Name)
 	if a then
 		if typeof(a) ~= typeName then
 			warn("find " .. typeof(a) .. " , not " .. typeName)
 		end
-		
+
 		return a
 	else
 		local b = Instance.new(typeName)

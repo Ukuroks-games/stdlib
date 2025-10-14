@@ -17,8 +17,6 @@ for i, v in pairs(listTables) do
 		local t = v
 		local clone = utility.clone(t)
 
-		print(t, v)
-
 		return utility.compare(t, clone)
 	end))
 end
