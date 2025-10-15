@@ -1,7 +1,7 @@
 [package]
 name = "egor00f/stdlib"
 description = "Library that implements some algorithms"
-version = "0.1.24"
+version = "0.1.25"
 registry = "https://github.com/UpliftGames/wally-index"
 realm = "shared"
 license = "MIT"
