@@ -117,14 +117,38 @@ function utility.clone <T>(t: T): T
 	local clone = table.clone(t)
 
 	for key, value in pairs(t) do
-		if type(value) == "table" then
-			clone[key] = utility.clone(value)
-		elseif utility.ForwardedGet(value, "Clone") ~= nil then
+		if utility.ForwardedGet(value, "Clone") ~= nil then
 			clone[key] = value:Clone()
+		elseif type(value) == "table" then
+			clone[key] = utility.clone(value)
 		end
 	end
 
 	return setmetatable(clone, getmetatable(t))
+end
+
+--[[
+	Get tables diff
+
+	return {
+		[key] = (Value1 and Value2): string
+	}
+]]
+function utility.diff (a: {}, b: {}): {}
+	local list = {}
+
+	local function cmp (c, d)
+		for i, v in pairs(c) do
+			if v ~= d[i] and list[i] == nil then
+				list[i] = tostring(v) .. " and " .. tostring(c[i])
+			end
+		end
+	end
+
+	cmp(a, b)
+	cmp(b, a)
+
+	return list
 end
 
 local function TypenameToInstanceValueName (name: string): string

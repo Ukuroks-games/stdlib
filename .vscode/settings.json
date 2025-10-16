@@ -19,7 +19,8 @@
         "rojo",
         "setmetatable",
         "stdlib",
-        "testlib"
+        "testlib",
+        "tostring"
     ],
     "cSpell.ignorePaths": [
         ".vscode",

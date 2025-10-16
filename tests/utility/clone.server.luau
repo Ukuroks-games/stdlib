@@ -3,20 +3,38 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local testlib = require(ReplicatedStorage.DevPackages.testlib)
 local utility = require(ReplicatedStorage.Packages.stdlib.utility)
 
-local listTables = {
-	{
-		22, 5352, 25,3, 32, "525", 434634, 6.5, "touch grass && cat grass"
-	},
-	{
-		22, Instance.new("BoolValue"), 25,3, 32, "525", 434634, 6.5, "touch grass && cat grass"
-	},
-}
+testlib:AddTest(testlib.test.new("clone table", function (): boolean
+	local t = {
+		22,
+		5352,
+		25,
+		3,
+		32,
+		"525",
+		434634,
+		6.5,
+		"touch grass && cat grass",
+	}
+	local clone = utility.clone(t)
 
-for i, v in pairs(listTables) do
-	testlib:AddTest(testlib.test.new("clone" .. i, function (): boolean
-		local t = v
+	return utility.compare(utility.diff(t, clone), {})
+end))
+
+testlib:AddTest(
+	testlib.test.new("clone table with Instances", function (): boolean
+		local t = {
+			22,
+			Instance.new("BoolValue"),
+			25,
+			3,
+			32,
+			"525",
+			434634,
+			6.5,
+			"touch grass && cat grass",
+		}
 		local clone = utility.clone(t)
 
-		return utility.compare(t, clone)
-	end))
-end
+		return utility.compare(utility.diff(t, clone), {}) == false	-- wrong because compare Instances is false
+	end)
+)
