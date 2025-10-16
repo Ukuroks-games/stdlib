@@ -1,3 +1,5 @@
+--!strict
+
 local queueMutex = {}
 
 export type QueueMutex = typeof(setmetatable(
@@ -23,6 +25,13 @@ function queueMutex.wait (self: QueueMutex)
 	if self.stack > 0 then
 		self.connect.Event:Wait()
 	end
+end
+
+function queueMutex.Clone (self: QueueMutex): QueueMutex
+	local c = table.clone(self)
+	c.connect = self.connect:Clone()
+
+	return c
 end
 
 function queueMutex.new (init: number?): QueueMutex

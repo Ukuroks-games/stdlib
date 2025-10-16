@@ -1,3 +1,5 @@
+--!strict
+
 --[[
 	simple mutex class
 ]]
@@ -6,14 +8,17 @@ local mutex = {}
 --[[
 	mutex struct
 ]]
-export type Mutex = typeof(setmetatable({} :: {
-	--[[
+export type Mutex = typeof(setmetatable(
+	{} :: {
+		--[[
 		Now is locked
 	]]
-	locked: boolean,
+		locked: boolean,
 
-	connect: BindableEvent,
-}, {__index = mutex}))
+		connect: BindableEvent,
+	},
+	{ __index = mutex }
+))
 
 --[[
 	Lock mutex
@@ -44,6 +49,13 @@ end
 ]]
 function mutex.Destroy (self: Mutex)
 	self.connect:Destroy()
+end
+
+function mutex.Clone (self: Mutex): Mutex
+	local c = table.clone(self)
+	c.connect = self.connect:Clone()
+
+	return c
 end
 
 --[[
