@@ -39,7 +39,7 @@ end
 	Wait if locked
 ]]
 function mutex.wait (self: Mutex)
-	if self.locked then
+	while self.locked do
 		self.connect.Event:Wait()
 	end
 end
